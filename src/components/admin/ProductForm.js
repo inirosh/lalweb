@@ -1,9 +1,10 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import Link from "next/link";
 import { useFormStatus } from "react-dom";
 import { CATEGORIES } from "@/lib/products";
+import { compressImage } from "@/lib/compressImage";
 
 function SubmitButton({ label }) {
   const { pending } = useFormStatus();
@@ -22,7 +23,31 @@ function SubmitButton({ label }) {
 // `product` is the existing product when editing (null when adding).
 export default function ProductForm({ action, product, submitLabel }) {
   const [state, formAction] = useActionState(action, null);
+  const [photoNote, setPhotoNote] = useState("");
   const p = product || {};
+
+  // Compress the chosen photo in the browser before it uploads.
+  async function handleFileChange(e) {
+    const input = e.target;
+    const file = input.files?.[0];
+    if (!file) return;
+    setPhotoNote("Optimizing photo…");
+    try {
+      const compressed = await compressImage(file);
+      const dt = new DataTransfer();
+      dt.items.add(compressed);
+      input.files = dt.files;
+      const kb = (compressed.size / 1024).toFixed(0);
+      const origKb = (file.size / 1024).toFixed(0);
+      setPhotoNote(
+        compressed === file
+          ? `Ready (${kb} KB)`
+          : `Optimized: ${origKb} KB → ${kb} KB ✓`
+      );
+    } catch {
+      setPhotoNote("Photo ready.");
+    }
+  }
 
   const field =
     "w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 outline-none focus:border-brand-orange";
@@ -101,8 +126,12 @@ export default function ProductForm({ action, product, submitLabel }) {
             type="file"
             name="imageFile"
             accept="image/*"
+            onChange={handleFileChange}
             className="block w-full text-sm text-gray-600 file:mr-3 file:rounded-lg file:border-0 file:bg-brand-orange file:px-4 file:py-2 file:font-bold file:text-white hover:file:opacity-90"
           />
+          {photoNote && (
+            <p className="mt-1 text-xs font-semibold text-green-600">{photoNote}</p>
+          )}
           <p className="mt-1 text-xs text-gray-400">
             {p.image
               ? "Choose a new photo to replace the current one, or leave blank to keep it."

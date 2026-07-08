@@ -1,4 +1,4 @@
-import { Poppins } from "next/font/google";
+import { Poppins, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 
 // Bold, high-contrast poster feel — Poppins carries the brand headings well.
@@ -6,6 +6,14 @@ const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
+});
+
+// Elegant italic serif for premium accent words in headings.
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-serif",
+  subsets: ["latin"],
+  weight: ["400"],
+  style: ["italic", "normal"],
 });
 
 export const metadata = {
@@ -16,7 +24,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${poppins.variable} h-full antialiased`}>
+    <html lang="en" className={`${poppins.variable} ${instrumentSerif.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-white text-[var(--foreground)]">
         {children}
       </body>
