@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SHOP, telLink } from "@/lib/shop";
+import { IconPin, IconPhone, IconMail, IconInstagram, IconClock } from "./icons";
 
 export default function Footer() {
   return (
@@ -34,12 +35,12 @@ export default function Footer() {
           <h3 className="mb-3 text-sm font-bold uppercase tracking-wide text-white">
             Contact
           </h3>
-          <ul className="space-y-2 text-sm text-gray-400">
-            <li>📍 {SHOP.location}</li>
-            <li>📞 <a href={telLink} className="hover:text-brand-yellow">{SHOP.phoneDisplay}</a></li>
-            <li>✉️ <a href={`mailto:${SHOP.email}`} className="hover:text-brand-yellow">{SHOP.email}</a></li>
-            <li>📷 <a href={SHOP.instagramUrl} target="_blank" rel="noreferrer" className="hover:text-brand-yellow">@{SHOP.instagram}</a></li>
-            <li>🕒 {SHOP.hours}</li>
+          <ul className="space-y-2.5 text-sm text-gray-400">
+            <li className="flex items-center gap-2.5"><IconPin width={16} height={16} className="shrink-0 text-brand-yellow" /> {SHOP.location}</li>
+            <li className="flex items-center gap-2.5"><IconPhone width={16} height={16} className="shrink-0 text-brand-yellow" /> <a href={telLink} className="hover:text-brand-yellow">{SHOP.phoneDisplay}</a></li>
+            <li className="flex items-center gap-2.5"><IconMail width={16} height={16} className="shrink-0 text-brand-yellow" /> <a href={`mailto:${SHOP.email}`} className="hover:text-brand-yellow">{SHOP.email}</a></li>
+            <li className="flex items-center gap-2.5"><IconInstagram width={16} height={16} className="shrink-0 text-brand-yellow" /> <a href={SHOP.instagramUrl} target="_blank" rel="noreferrer" className="hover:text-brand-yellow">@{SHOP.instagram}</a></li>
+            <li className="flex items-center gap-2.5"><IconClock width={16} height={16} className="shrink-0 text-brand-yellow" /> {SHOP.hours}</li>
           </ul>
         </div>
       </div>

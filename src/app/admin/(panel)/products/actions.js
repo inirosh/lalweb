@@ -62,12 +62,17 @@ async function uploadImageIfPresent(formData, supabase) {
 function readForm(formData) {
   const name = String(formData.get("name") || "").trim();
   const slugInput = String(formData.get("slug") || "").trim();
+  const price = Number(formData.get("price") || 0);
+  const offerRaw = String(formData.get("offer_price") || "").trim();
+  const offerNum = offerRaw === "" ? null : Number(offerRaw);
   return {
     name,
     slug: slugInput ? slugify(slugInput) : slugify(name),
     category: String(formData.get("category") || "").trim(),
     brand: String(formData.get("brand") || "").trim() || null,
-    price: Number(formData.get("price") || 0),
+    price,
+    // Only keep a sale price if it's a valid number below the normal price
+    offer_price: offerNum != null && offerNum > 0 && offerNum < price ? offerNum : null,
     stock_qty: parseInt(formData.get("stock_qty") || "0", 10),
     low_stock_threshold: parseInt(formData.get("low_stock_threshold") || "3", 10),
     featured: formData.get("featured") === "on",

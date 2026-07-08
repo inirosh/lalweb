@@ -27,6 +27,7 @@ function mapProduct(row) {
     category: row.category,
     brand: row.brand,
     price: Number(row.price),
+    offerPrice: row.offer_price != null ? Number(row.offer_price) : null,
     inStock: row.in_stock,
     stockQty: row.stock_qty,
     lowStockThreshold: row.low_stock_threshold,

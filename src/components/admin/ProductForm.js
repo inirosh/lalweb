@@ -88,6 +88,12 @@ export default function ProductForm({ action, product, submitLabel }) {
         </div>
 
         <div>
+          <label className={labelCls}>Sale price (Rs) — optional</label>
+          <input name="offer_price" type="number" min="0" step="0.01" defaultValue={p.offerPrice ?? ""} className={field} placeholder="e.g. 9900 (leave blank for no offer)" />
+          <p className="mt-1 text-xs text-gray-400">If set lower than the price, the product shows a discount badge.</p>
+        </div>
+
+        <div>
           <label className={labelCls}>Stock quantity *</label>
           <input name="stock_qty" type="number" min="0" step="1" defaultValue={p.stockQty ?? 0} required className={field} placeholder="10" />
         </div>

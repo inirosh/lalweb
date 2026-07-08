@@ -4,6 +4,7 @@ import Reveal from "@/components/anim/Reveal";
 import WordSwap from "@/components/anim/WordSwap";
 import { getFeaturedProducts, CATEGORIES } from "@/lib/products";
 import { SHOP, telLink, whatsappLink } from "@/lib/shop";
+import { IconBag, IconPhone, IconChat, IconShield, IconTruck, IconBolt, IconStar } from "@/components/icons";
 
 export const dynamic = "force-dynamic";
 
@@ -73,13 +74,13 @@ export default async function HomePage() {
                 href="/products"
                 className="brand-gradient hover-lift inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-center font-bold text-white shadow-lg shadow-brand-red/20"
               >
-                🛒 Browse Products
+                <IconBag width={18} height={18} /> Browse Products
               </Link>
               <a
                 href={telLink}
                 className="hover-lift inline-flex items-center justify-center gap-2 rounded-full border-2 border-gray-900 px-7 py-3.5 text-center font-bold text-gray-900 transition-colors hover:bg-gray-900 hover:text-white"
               >
-                📞 Call {SHOP.phoneDisplay}
+                <IconPhone width={18} height={18} /> Call {SHOP.phoneDisplay}
               </a>
             </div>
 
@@ -207,17 +208,19 @@ export default async function HomePage() {
         </Reveal>
         <Reveal stagger className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            ["🏆", "Trusted Local Shop", "Serving Wadduwa with 16K+ happy followers."],
-            ["🔧", "Official EMTOP Distributor", "Genuine tools, sourced directly."],
-            ["🛡️", "Warranty Included", "Peace of mind on eligible products."],
-            ["💰", "Best Value", "Honest, value-for-money pricing."],
-          ].map(([icon, title, desc], i) => (
+            [IconStar, "Trusted Local Shop", "Serving Wadduwa with 16K+ happy followers."],
+            [IconTruck, "Official EMTOP Distributor", "Genuine tools, sourced directly."],
+            [IconShield, "Warranty Included", "Peace of mind on eligible products."],
+            [IconBolt, "Best Value", "Honest, value-for-money pricing."],
+          ].map(([Icon, title, desc], i) => (
             <div
               key={title}
               style={{ "--i": i }}
               className="hover-lift rounded-2xl border border-gray-200 bg-white p-6 shadow-sm"
             >
-              <span className="text-3xl">{icon}</span>
+              <span className="brand-gradient inline-flex h-12 w-12 items-center justify-center rounded-xl text-white">
+                <Icon width={22} height={22} />
+              </span>
               <h3 className="mt-3 font-black text-gray-900">{title}</h3>
               <p className="mt-1 text-sm text-gray-500">{desc}</p>
             </div>
@@ -237,11 +240,11 @@ export default async function HomePage() {
               Talk to us directly — we&apos;re here to help you buy smart.
             </p>
             <div className="relative mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-              <a href={telLink} className="hover-lift rounded-full bg-white px-7 py-3.5 font-bold text-brand-red shadow">
-                📞 Call Now
+              <a href={telLink} className="hover-lift inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 font-bold text-brand-red shadow">
+                <IconPhone width={18} height={18} /> Call Now
               </a>
-              <a href={whatsappLink()} target="_blank" rel="noreferrer" className="hover-lift rounded-full bg-brand-dark px-7 py-3.5 font-bold text-white shadow">
-                💬 WhatsApp Us
+              <a href={whatsappLink()} target="_blank" rel="noreferrer" className="hover-lift inline-flex items-center justify-center gap-2 rounded-full bg-brand-dark px-7 py-3.5 font-bold text-white shadow">
+                <IconChat width={18} height={18} /> WhatsApp Us
               </a>
             </div>
           </div>

@@ -1,36 +1,64 @@
 import Link from "next/link";
 import ProductImage from "./ProductImage";
-import StockBadge from "./StockBadge";
-import { formatPrice, getCategoryName } from "@/lib/products";
+import { formatPrice } from "@/lib/products";
+import { IconStar } from "./icons";
 
 export default function ProductCard({ product }) {
+  const hasOffer =
+    product.offerPrice != null && product.offerPrice < product.price;
+  const shownPrice = hasOffer ? product.offerPrice : product.price;
+  const discount = hasOffer
+    ? Math.round(((product.price - product.offerPrice) / product.price) * 100)
+    : 0;
+
   return (
     <Link
       href={`/products/${product.slug}`}
-      className="group flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl"
+      className="group flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white transition-shadow hover:shadow-md"
     >
-      <div className="relative aspect-square overflow-hidden">
-        <ProductImage product={product} className="transition-transform duration-300 group-hover:scale-105" />
-        <span className="absolute left-2 top-2 rounded bg-brand-yellow px-2 py-0.5 text-[10px] font-bold uppercase text-brand-dark">
-          {getCategoryName(product.category)}
-        </span>
+      {/* Image */}
+      <div className="relative aspect-square overflow-hidden bg-gray-50">
+        <ProductImage
+          product={product}
+          className="transition-transform duration-300 group-hover:scale-105"
+        />
+        {hasOffer && (
+          <span className="absolute left-0 top-2 rounded-r-md bg-brand-red px-2 py-0.5 text-[11px] font-extrabold text-white shadow">
+            -{discount}%
+          </span>
+        )}
+        {!product.inStock && (
+          <span className="absolute inset-0 flex items-center justify-center bg-white/70 text-sm font-bold text-gray-700">
+            Out of Stock
+          </span>
+        )}
       </div>
 
-      <div className="flex flex-1 flex-col p-4">
-        <h3 className="line-clamp-2 text-sm font-bold text-gray-900 group-hover:text-brand-red">
+      {/* Body */}
+      <div className="flex flex-1 flex-col p-2.5">
+        <h3 className="line-clamp-2 min-h-[2.5rem] text-[13px] leading-tight text-gray-800 group-hover:text-brand-red">
           {product.name}
         </h3>
-        <p className="mt-1 line-clamp-2 text-xs text-gray-500">
-          {product.shortDescription}
-        </p>
 
-        <div className="mt-auto pt-3">
-          <div className="flex items-center justify-between">
-            <span className="text-lg font-black text-brand-red">
+        {/* Price */}
+        <div className="mt-1.5 flex items-baseline gap-1.5">
+          <span className="text-base font-extrabold text-brand-red">
+            {formatPrice(shownPrice)}
+          </span>
+          {hasOffer && (
+            <span className="text-xs text-gray-400 line-through">
               {formatPrice(product.price)}
             </span>
-            <StockBadge inStock={product.inStock} />
-          </div>
+          )}
+        </div>
+
+        {/* Meta row (brand + trust) */}
+        <div className="mt-1.5 flex items-center justify-between text-[11px] text-gray-400">
+          <span className="truncate">{product.brand || "Genuine"}</span>
+          <span className="flex items-center gap-0.5 text-brand-yellow">
+            <IconStar width={11} height={11} />
+            <span className="text-gray-500">Trusted</span>
+          </span>
         </div>
       </div>
     </Link>

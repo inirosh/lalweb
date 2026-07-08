@@ -1,7 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
-// Shows the real product photo when available, otherwise a branded
-// placeholder with the product name. This lets the site look complete
-// before you have uploaded photos for every item.
+import { IconTruck } from "./icons";
+
+// Shows the real product photo when available, otherwise a clean branded
+// placeholder. This lets the site look complete before every item has a photo.
 export default function ProductImage({ product, className = "" }) {
   if (product.image) {
     return (
@@ -15,14 +16,11 @@ export default function ProductImage({ product, className = "" }) {
 
   return (
     <div
-      className={`flex h-full w-full flex-col items-center justify-center bg-brand-dark p-4 text-center ${className}`}
+      className={`flex h-full w-full flex-col items-center justify-center gap-2 bg-gradient-to-br from-gray-50 to-gray-100 p-3 text-center ${className}`}
     >
-      <span className="text-3xl">🛠️</span>
-      <span className="mt-2 text-sm font-bold text-brand-yellow">
+      <IconTruck width={30} height={30} className="text-gray-300" />
+      <span className="line-clamp-2 text-[11px] font-semibold text-gray-400">
         {product.name}
-      </span>
-      <span className="mt-1 text-[10px] uppercase tracking-wide text-gray-400">
-        Photo coming soon
       </span>
     </div>
   );
