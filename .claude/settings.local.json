@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Move-Item -Destination \"D:\\\\LAL WEB\" -Force)",
+      "PowerShell(npm run build 2>&1)",
+      "PowerShell(npm install @supabase/supabase-js 2>&1)",
+      "PowerShell(npm install @supabase/ssr 2>&1)",
+      "PowerShell(Move-Item \"D:\\\\LAL WEB\\\\src\\\\middleware.js\" \"D:\\\\LAL WEB\\\\src\\\\proxy.js\" -Force)",
+      "PowerShell(npm install @react-pdf/renderer 2>&1)",
+      "Bash(git --version)",
+      "Bash(git rev-parse *)",
+      "Bash(git init *)",
+      "Bash(git add *)"
+    ]
+  }
+}

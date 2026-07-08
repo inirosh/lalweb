@@ -1,0 +1,95 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import ProductImage from "@/components/ProductImage";
+import StockBadge from "@/components/StockBadge";
+import InquiryButtons from "@/components/InquiryButtons";
+import {
+  getProductBySlug,
+  getCategoryName,
+  formatPrice,
+} from "@/lib/products";
+
+// Always fetch fresh so stock/price changes show up right away
+export const dynamic = "force-dynamic";
+
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+  const product = await getProductBySlug(slug);
+  if (!product) return { title: "Product not found | Lal Distributors" };
+  return {
+    title: `${product.name} | Lal Distributors`,
+    description: product.shortDescription,
+  };
+}
+
+export default async function ProductDetailPage({ params }) {
+  const { slug } = await params;
+  const product = await getProductBySlug(slug);
+  if (!product) notFound();
+
+  return (
+    <div className="mx-auto max-w-5xl px-4 py-8">
+      {/* Breadcrumb */}
+      <nav className="mb-6 text-sm text-gray-500">
+        <Link href="/" className="hover:text-brand-red">Home</Link>
+        <span className="mx-2">/</span>
+        <Link href="/products" className="hover:text-brand-red">Products</Link>
+        <span className="mx-2">/</span>
+        <span className="font-semibold text-gray-700">{product.name}</span>
+      </nav>
+
+      <div className="grid gap-8 md:grid-cols-2">
+        {/* Image */}
+        <div className="aspect-square overflow-hidden rounded-2xl border border-gray-200 bg-gray-50">
+          <ProductImage product={product} />
+        </div>
+
+        {/* Details */}
+        <div className="flex flex-col">
+          <span className="inline-block w-fit rounded bg-brand-yellow px-2 py-0.5 text-[11px] font-bold uppercase text-brand-dark">
+            {getCategoryName(product.category)}
+          </span>
+          <h1 className="mt-3 text-2xl font-black text-gray-900 sm:text-3xl">
+            {product.name}
+          </h1>
+          {product.brand && (
+            <p className="mt-1 text-sm text-gray-500">Brand: {product.brand}</p>
+          )}
+
+          <div className="mt-4 flex items-center gap-4">
+            <span className="text-3xl font-black text-brand-red">
+              {formatPrice(product.price)}
+            </span>
+            <StockBadge inStock={product.inStock} />
+          </div>
+
+          <p className="mt-5 leading-relaxed text-gray-700">
+            {product.description}
+          </p>
+
+          {/* Warranty */}
+          <div className="mt-5 flex items-center gap-2 rounded-lg bg-gray-50 px-4 py-3 text-sm">
+            <span className="text-lg">🛡️</span>
+            <span className="font-semibold text-gray-800">
+              {product.warranty}
+            </span>
+          </div>
+
+          {/* Inquiry */}
+          <div className="mt-6">
+            <p className="mb-3 text-sm font-semibold text-gray-600">
+              Interested? Contact us to buy or ask a question:
+            </p>
+            <InquiryButtons productName={product.name} />
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-10">
+        <Link href="/products" className="text-sm font-bold text-brand-red hover:underline">
+          ← Back to all products
+        </Link>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,114 @@
+"use server";
+
+// ===================================================================
+// Server actions for managing products. These run ONLY on the server.
+// Each one first checks that a valid admin is logged in, then uses the
+// secret admin client to add / edit / delete a product in Supabase.
+// ===================================================================
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { createAdminClient } from "@/lib/supabase/server";
+import { createSupabaseServer } from "@/lib/supabase/serverClient";
+
+// Make sure the request comes from a logged-in admin.
+async function requireAdmin() {
+  const supabase = await createSupabaseServer();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/admin/login");
+}
+
+// Turn "Cordless Drill 20V" into "cordless-drill-20v"
+function slugify(text) {
+  return String(text)
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+// Read the form fields into a clean object for the database.
+function readForm(formData) {
+  const name = String(formData.get("name") || "").trim();
+  const slugInput = String(formData.get("slug") || "").trim();
+  return {
+    name,
+    slug: slugInput ? slugify(slugInput) : slugify(name),
+    category: String(formData.get("category") || "").trim(),
+    brand: String(formData.get("brand") || "").trim() || null,
+    price: Number(formData.get("price") || 0),
+    stock_qty: parseInt(formData.get("stock_qty") || "0", 10),
+    low_stock_threshold: parseInt(formData.get("low_stock_threshold") || "3", 10),
+    featured: formData.get("featured") === "on",
+    warranty: String(formData.get("warranty") || "").trim() || null,
+    short_description: String(formData.get("short_description") || "").trim() || null,
+    description: String(formData.get("description") || "").trim() || null,
+    image: String(formData.get("image") || "").trim() || null,
+  };
+}
+
+// Refresh the pages that show product data.
+function refreshPages() {
+  revalidatePath("/admin/products");
+  revalidatePath("/products");
+  revalidatePath("/");
+}
+
+export async function createProduct(prevState, formData) {
+  await requireAdmin();
+  const values = readForm(formData);
+
+  if (!values.name || !values.category) {
+    return { error: "Name and category are required." };
+  }
+
+  const supabase = createAdminClient();
+  const { error } = await supabase.from("products").insert(values);
+
+  if (error) {
+    // A duplicate slug is the most common problem.
+    return {
+      error: error.message.includes("duplicate")
+        ? "A product with this web address (slug) already exists. Use a different name or slug."
+        : "Could not save product: " + error.message,
+    };
+  }
+
+  refreshPages();
+  redirect("/admin/products?saved=1");
+}
+
+export async function updateProduct(id, prevState, formData) {
+  await requireAdmin();
+  const values = readForm(formData);
+
+  if (!values.name || !values.category) {
+    return { error: "Name and category are required." };
+  }
+
+  const supabase = createAdminClient();
+  const { error } = await supabase.from("products").update(values).eq("id", id);
+
+  if (error) {
+    return {
+      error: error.message.includes("duplicate")
+        ? "A product with this web address (slug) already exists. Use a different name or slug."
+        : "Could not update product: " + error.message,
+    };
+  }
+
+  refreshPages();
+  redirect("/admin/products?saved=1");
+}
+
+export async function deleteProduct(id) {
+  await requireAdmin();
+  const supabase = createAdminClient();
+  const { error } = await supabase.from("products").delete().eq("id", id);
+  if (error) {
+    return { error: "Could not delete product: " + error.message };
+  }
+  refreshPages();
+  redirect("/admin/products?deleted=1");
+}
