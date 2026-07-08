@@ -49,7 +49,26 @@ export default async function HomePage() {
               {SHOP.location}.
             </p>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            {/* Search bar */}
+            <form action="/products" className="mt-7 flex items-center rounded-full border border-gray-200 bg-white p-1.5 shadow-lg shadow-black/5 focus-within:border-brand-orange">
+              <span className="pl-3 text-gray-400">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="M21 21l-4.3-4.3" strokeLinecap="round" />
+                </svg>
+              </span>
+              <input
+                type="search"
+                name="q"
+                placeholder="Search drills, washers, EMTOP…"
+                className="min-w-0 flex-1 bg-transparent px-3 py-2 text-gray-900 outline-none"
+              />
+              <button type="submit" className="brand-gradient rounded-full px-5 py-2.5 text-sm font-bold text-white">
+                Search
+              </button>
+            </form>
+
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/products"
                 className="brand-gradient hover-lift inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-center font-bold text-white shadow-lg shadow-brand-red/20"
@@ -82,11 +101,17 @@ export default async function HomePage() {
             </div>
           </Reveal>
 
-          {/* Poster-style floating visual */}
+          {/* EMTOP hero product image + poster-style floating visual */}
           <Reveal className="relative mx-auto w-full max-w-sm">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="https://nafldzwawqvljotcxspw.supabase.co/storage/v1/object/public/product-images/emtop-cordless-drill-20v.png"
+              alt="EMTOP 20V Cordless Drill"
+              className="anim-float pointer-events-none relative z-10 mx-auto -mb-6 w-64 drop-shadow-2xl sm:w-72"
+            />
             <div className="anim-float shine relative rounded-3xl border-4 border-brand-yellow bg-brand-dark p-7 shadow-2xl">
               <p className="text-center text-xs font-bold uppercase tracking-widest text-brand-yellow">
-                Best Value in Waduwa
+                Best Value in Wadduwa
               </p>
               <p className="mt-3 text-center text-4xl font-black leading-none text-white">
                 TOOLS THAT
@@ -182,7 +207,7 @@ export default async function HomePage() {
         </Reveal>
         <Reveal stagger className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            ["🏆", "Trusted Local Shop", "Serving Waduwa with 16K+ happy followers."],
+            ["🏆", "Trusted Local Shop", "Serving Wadduwa with 16K+ happy followers."],
             ["🔧", "Official EMTOP Distributor", "Genuine tools, sourced directly."],
             ["🛡️", "Warranty Included", "Peace of mind on eligible products."],
             ["💰", "Best Value", "Honest, value-for-money pricing."],

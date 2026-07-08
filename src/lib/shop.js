@@ -5,7 +5,7 @@
 export const SHOP = {
   name: "Lal Distributors & Tools Shop",
   altName: "Lal Distributors Home Appliances",
-  location: "Waduwa, Sri Lanka",
+  location: "Wadduwa, Sri Lanka",
   phoneDisplay: "071 247 3281",
   // International format used for tel: and WhatsApp links (Sri Lanka +94)
   phoneIntl: "94712473281",

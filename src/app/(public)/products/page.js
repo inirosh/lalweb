@@ -5,7 +5,7 @@ import { getAllProducts, CATEGORIES } from "@/lib/products";
 export const metadata = {
   title: "Products | Lal Distributors — Power Tools & Home Appliances",
   description:
-    "Browse power tools, pressure washers, air compressors and home appliances at Lal Distributors, Waduwa.",
+    "Browse power tools, pressure washers, air compressors and home appliances at Lal Distributors, Wadduwa.",
 };
 
 export const dynamic = "force-dynamic";

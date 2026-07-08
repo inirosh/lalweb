@@ -35,9 +35,12 @@ export default function Header() {
       >
         {/* Logo / shop name */}
         <Link href="/" className="flex items-center gap-2.5 pl-1" onClick={() => setOpen(false)}>
-          <span className="brand-gradient shine flex h-9 w-9 items-center justify-center rounded-xl text-base font-black text-white shadow">
-            LD
-          </span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logo.jpg"
+            alt="Lal Distributors logo"
+            className="h-10 w-10 rounded-xl object-cover shadow ring-1 ring-brand-yellow/50"
+          />
           <span className="leading-tight">
             <span className="block text-sm font-extrabold tracking-tight text-gray-900">
               LAL DISTRIBUTORS

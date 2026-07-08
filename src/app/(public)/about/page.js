@@ -3,9 +3,9 @@ import { SHOP, telLink } from "@/lib/shop";
 import { CATEGORIES } from "@/lib/products";
 
 export const metadata = {
-  title: "About Us | Lal Distributors — Waduwa",
+  title: "About Us | Lal Distributors — Wadduwa",
   description:
-    "Learn about Lal Distributors & Tools Shop in Waduwa, Sri Lanka — your trusted local source for power tools and home appliances.",
+    "Learn about Lal Distributors & Tools Shop in Wadduwa, Sri Lanka — your trusted local source for power tools and home appliances.",
 };
 
 export default function AboutPage() {
@@ -54,7 +54,7 @@ export default function AboutPage() {
         <h3 className="mt-10 text-lg font-black text-gray-900">Why Choose Us</h3>
         <ul className="mt-4 space-y-3">
           {[
-            ["🏆", "Trusted local business in Waduwa"],
+            ["🏆", "Trusted local business in Wadduwa"],
             ["💰", "Value-for-money pricing"],
             ["🛡️", "Warranty on eligible products"],
             ["📞", "Friendly advice — just call or WhatsApp us"],

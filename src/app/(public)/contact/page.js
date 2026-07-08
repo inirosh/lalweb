@@ -1,9 +1,9 @@
 import { SHOP, telLink, whatsappLink } from "@/lib/shop";
 
 export const metadata = {
-  title: "Contact | Lal Distributors — Waduwa",
+  title: "Contact | Lal Distributors — Wadduwa",
   description:
-    "Contact Lal Distributors in Waduwa, Sri Lanka. Call 071 247 3281, email or find us on the map.",
+    "Contact Lal Distributors in Wadduwa, Sri Lanka. Call 071 247 3281, email or find us on the map.",
 };
 
 export default function ContactPage() {
@@ -82,7 +82,7 @@ export default function ContactPage() {
             <p className="mt-2 text-gray-600">{SHOP.location}</p>
             <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200 shadow">
               <iframe
-                title="Lal Distributors location — Waduwa"
+                title="Lal Distributors location — Wadduwa"
                 src="https://www.google.com/maps?q=Wadduwa,+Sri+Lanka&output=embed"
                 className="h-72 w-full md:h-80"
                 loading="lazy"

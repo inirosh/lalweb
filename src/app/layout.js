@@ -17,9 +17,9 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata = {
-  title: "Lal Distributors & Tools Shop | Power Tools & Home Appliances — Waduwa",
+  title: "Lal Distributors & Tools Shop | Power Tools & Home Appliances — Wadduwa",
   description:
-    "Lal Distributors — Power tools, pressure washers, air compressors and home appliances in Waduwa, Sri Lanka. Value for money. Call 071 247 3281.",
+    "Lal Distributors — Power tools, pressure washers, air compressors and home appliances in Wadduwa, Sri Lanka. Value for money. Call 071 247 3281.",
 };
 
 export default function RootLayout({ children }) {
