@@ -88,8 +88,28 @@ export default function ProductForm({ action, product, submitLabel }) {
         </div>
 
         <div className="sm:col-span-2">
-          <label className={labelCls}>Image URL (optional)</label>
-          <input name="image" defaultValue={p.image} className={field} placeholder="https://… (leave blank to show a placeholder)" />
+          <label className={labelCls}>Product photo</label>
+          {p.image && (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={p.image}
+              alt="Current product photo"
+              className="mb-2 h-24 w-24 rounded-lg border border-gray-200 object-cover"
+            />
+          )}
+          <input
+            type="file"
+            name="imageFile"
+            accept="image/*"
+            className="block w-full text-sm text-gray-600 file:mr-3 file:rounded-lg file:border-0 file:bg-brand-orange file:px-4 file:py-2 file:font-bold file:text-white hover:file:opacity-90"
+          />
+          <p className="mt-1 text-xs text-gray-400">
+            {p.image
+              ? "Choose a new photo to replace the current one, or leave blank to keep it."
+              : "Upload a photo from your computer or phone (JPG/PNG). Optional — a placeholder is shown if left blank."}
+          </p>
+          {/* Keeps the existing photo when editing if no new file is chosen. */}
+          <input type="hidden" name="image" defaultValue={p.image || ""} />
         </div>
 
         <div className="sm:col-span-2">

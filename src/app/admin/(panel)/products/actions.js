@@ -28,6 +28,36 @@ function slugify(text) {
     .replace(/^-+|-+$/g, "");
 }
 
+const IMAGE_BUCKET = "product-images";
+
+// If the admin picked a photo file, upload it to Supabase Storage and
+// return its public URL. Otherwise return null. Creates the storage
+// bucket automatically the first time.
+async function uploadImageIfPresent(formData, supabase) {
+  const file = formData.get("imageFile");
+  if (!file || typeof file === "string" || file.size === 0) return null;
+
+  // Make sure the public bucket exists (ignore "already exists").
+  await supabase.storage.createBucket(IMAGE_BUCKET, { public: true }).catch(() => {});
+
+  const ext = (file.name?.split(".").pop() || "jpg").toLowerCase();
+  const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+  const bytes = Buffer.from(await file.arrayBuffer());
+
+  const { error } = await supabase.storage
+    .from(IMAGE_BUCKET)
+    .upload(path, bytes, {
+      contentType: file.type || "image/jpeg",
+      upsert: false,
+    });
+  if (error) {
+    console.error("Image upload failed:", error.message);
+    return null;
+  }
+
+  return supabase.storage.from(IMAGE_BUCKET).getPublicUrl(path).data.publicUrl;
+}
+
 // Read the form fields into a clean object for the database.
 function readForm(formData) {
   const name = String(formData.get("name") || "").trim();
@@ -64,6 +94,11 @@ export async function createProduct(prevState, formData) {
   }
 
   const supabase = createAdminClient();
+
+  // If a photo was uploaded, use it (overrides the optional URL field).
+  const uploadedUrl = await uploadImageIfPresent(formData, supabase);
+  if (uploadedUrl) values.image = uploadedUrl;
+
   const { error } = await supabase.from("products").insert(values);
 
   if (error) {
@@ -88,6 +123,11 @@ export async function updateProduct(id, prevState, formData) {
   }
 
   const supabase = createAdminClient();
+
+  // If a new photo was uploaded, use it; otherwise keep the existing image.
+  const uploadedUrl = await uploadImageIfPresent(formData, supabase);
+  if (uploadedUrl) values.image = uploadedUrl;
+
   const { error } = await supabase.from("products").update(values).eq("id", id);
 
   if (error) {
