@@ -170,3 +170,39 @@ export function IconBolt(props) {
     </svg>
   );
 }
+
+export function IconWrench(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M14.7 6.3a4 4 0 0 0-5.4 5.2L3 17.8 6.2 21l6.3-6.3a4 4 0 0 0 5.2-5.4l-2.6 2.6-2.5-2.5z" />
+    </svg>
+  );
+}
+
+export function IconDroplet(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M12 3s6 5.7 6 10a6 6 0 0 1-12 0c0-4.3 6-10 6-10z" />
+    </svg>
+  );
+}
+
+export function IconWind(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M3 8h11a3 3 0 1 0-3-3" />
+      <path d="M3 12h15a3 3 0 1 1-3 3" />
+      <path d="M3 16h9" />
+    </svg>
+  );
+}
+
+export function IconPlug(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M9 2v6M15 2v6" />
+      <path d="M6 8h12v3a6 6 0 0 1-12 0z" />
+      <path d="M12 17v5" />
+    </svg>
+  );
+}
