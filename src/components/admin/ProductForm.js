@@ -49,6 +49,23 @@ export default function ProductForm({ action, product, submitLabel }) {
     }
   }
 
+  const [galleryNote, setGalleryNote] = useState("");
+  // Compress each extra photo before upload.
+  async function handleGalleryChange(e) {
+    const input = e.target;
+    const files = Array.from(input.files || []);
+    if (files.length === 0) return;
+    setGalleryNote("Optimizing photos…");
+    try {
+      const dt = new DataTransfer();
+      for (const f of files) dt.items.add(await compressImage(f));
+      input.files = dt.files;
+      setGalleryNote(`${files.length} photo${files.length !== 1 ? "s" : ""} ready ✓`);
+    } catch {
+      setGalleryNote("Photos ready.");
+    }
+  }
+
   const field =
     "w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 outline-none focus:border-brand-orange";
   const labelCls = "mb-1 block text-sm font-semibold text-gray-700";
@@ -151,6 +168,32 @@ export default function ProductForm({ action, product, submitLabel }) {
           </p>
           {/* Keeps the existing photo when editing if no new file is chosen. */}
           <input type="hidden" name="image" defaultValue={p.image || ""} />
+        </div>
+
+        {/* Gallery (extra photos) */}
+        <div className="sm:col-span-2">
+          <label className={labelCls}>Extra photos (gallery)</label>
+          {p.gallery && p.gallery.length > 0 && (
+            <div className="mb-2 flex flex-wrap gap-2">
+              {p.gallery.map((src, i) => (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img key={i} src={src} alt="" className="h-16 w-16 rounded-lg border border-gray-200 object-cover" />
+              ))}
+            </div>
+          )}
+          <input
+            type="file"
+            name="galleryFiles"
+            accept="image/*"
+            multiple
+            onChange={handleGalleryChange}
+            className="block w-full text-sm text-gray-600 file:mr-3 file:rounded-lg file:border-0 file:bg-gray-800 file:px-4 file:py-2 file:font-bold file:text-white hover:file:opacity-90"
+          />
+          {galleryNote && <p className="mt-1 text-xs font-semibold text-green-600">{galleryNote}</p>}
+          <p className="mt-1 text-xs text-gray-400">
+            Select several photos to show a gallery on the product page. New photos are added to any existing ones.
+          </p>
+          <input type="hidden" name="gallery_existing" defaultValue={JSON.stringify(p.gallery || [])} />
         </div>
 
         <div className="sm:col-span-2">

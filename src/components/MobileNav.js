@@ -11,6 +11,9 @@ export default function MobileNav() {
   const pathname = usePathname();
   const { count } = useCart();
 
+  // On a product detail page the sticky buy bar replaces this tab bar.
+  if (/^\/products\/.+/.test(pathname)) return null;
+
   const isActive = (href) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 

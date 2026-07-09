@@ -58,6 +58,36 @@ async function uploadImageIfPresent(formData, supabase) {
   return supabase.storage.from(IMAGE_BUCKET).getPublicUrl(path).data.publicUrl;
 }
 
+// Upload any extra gallery photos and return their public URLs.
+async function uploadGalleryIfPresent(formData, supabase) {
+  const files = formData
+    .getAll("galleryFiles")
+    .filter((f) => f && typeof f !== "string" && f.size > 0);
+  if (files.length === 0) return [];
+  await supabase.storage.createBucket(IMAGE_BUCKET, { public: true }).catch(() => {});
+  const urls = [];
+  for (const file of files) {
+    const ext = (file.name?.split(".").pop() || "jpg").toLowerCase();
+    const path = `gallery-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    const bytes = Buffer.from(await file.arrayBuffer());
+    const { error } = await supabase.storage
+      .from(IMAGE_BUCKET)
+      .upload(path, bytes, { contentType: file.type || "image/jpeg" });
+    if (!error) urls.push(supabase.storage.from(IMAGE_BUCKET).getPublicUrl(path).data.publicUrl);
+  }
+  return urls;
+}
+
+// Existing gallery (kept on edit) comes through as a JSON hidden field.
+function readExistingGallery(formData) {
+  try {
+    const arr = JSON.parse(formData.get("gallery_existing") || "[]");
+    return Array.isArray(arr) ? arr : [];
+  } catch {
+    return [];
+  }
+}
+
 // Read the form fields into a clean object for the database.
 function readForm(formData) {
   const name = String(formData.get("name") || "").trim();
@@ -105,6 +135,9 @@ export async function createProduct(prevState, formData) {
   const uploadedUrl = await uploadImageIfPresent(formData, supabase);
   if (uploadedUrl) values.image = uploadedUrl;
 
+  // Gallery: keep existing + append newly uploaded.
+  values.gallery = [...readExistingGallery(formData), ...(await uploadGalleryIfPresent(formData, supabase))];
+
   const { error } = await supabase.from("products").insert(values);
 
   if (error) {
@@ -133,6 +166,9 @@ export async function updateProduct(id, prevState, formData) {
   // If a new photo was uploaded, use it; otherwise keep the existing image.
   const uploadedUrl = await uploadImageIfPresent(formData, supabase);
   if (uploadedUrl) values.image = uploadedUrl;
+
+  // Gallery: keep existing + append newly uploaded.
+  values.gallery = [...readExistingGallery(formData), ...(await uploadGalleryIfPresent(formData, supabase))];
 
   const { error } = await supabase.from("products").update(values).eq("id", id);
 

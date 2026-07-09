@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import ProductImage from "@/components/ProductImage";
+import ProductGallery from "@/components/ProductGallery";
+import ProductBuyBar from "@/components/ProductBuyBar";
 import StockBadge from "@/components/StockBadge";
 import InquiryButtons from "@/components/InquiryButtons";
 import AddToCartButton from "@/components/cart/AddToCartButton";
@@ -30,7 +31,7 @@ export default async function ProductDetailPage({ params }) {
   if (!product) notFound();
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8">
+    <div className="mx-auto max-w-5xl px-4 py-8 pb-24 md:pb-8">
       {/* Breadcrumb */}
       <nav className="mb-6 text-sm text-gray-500">
         <Link href="/" className="hover:text-brand-red">Home</Link>
@@ -41,10 +42,8 @@ export default async function ProductDetailPage({ params }) {
       </nav>
 
       <div className="grid gap-8 md:grid-cols-2">
-        {/* Image */}
-        <div className="aspect-square overflow-hidden rounded-2xl border border-gray-200 bg-gray-50">
-          <ProductImage product={product} />
-        </div>
+        {/* Image gallery */}
+        <ProductGallery images={[product.image, ...product.gallery]} name={product.name} />
 
         {/* Details */}
         <div className="flex flex-col">
@@ -93,8 +92,8 @@ export default async function ProductDetailPage({ params }) {
             </div>
           )}
 
-          {/* Buy actions */}
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+          {/* Buy actions (desktop — mobile uses the sticky bar below) */}
+          <div className="mt-6 hidden gap-3 sm:flex-row md:flex">
             <AddToCartButton product={product} mode="add" className="flex-1" />
             <AddToCartButton product={product} mode="buy" className="flex-1" />
           </div>
@@ -114,6 +113,9 @@ export default async function ProductDetailPage({ params }) {
           ← Back to all products
         </Link>
       </div>
+
+      {/* Sticky buy bar (mobile) */}
+      <ProductBuyBar product={product} />
     </div>
   );
 }

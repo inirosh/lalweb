@@ -37,6 +37,7 @@ function mapProduct(row) {
     shortDescription: row.short_description,
     description: row.description,
     image: row.image,
+    gallery: Array.isArray(row.gallery) ? row.gallery : [],
   };
 }
 
