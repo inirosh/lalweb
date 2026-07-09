@@ -22,6 +22,11 @@ export default async function sitemap() {
     { url: `${BASE}/products`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
     { url: `${BASE}/about`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE}/contact`, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${BASE}/delivery`, changeFrequency: "monthly", priority: 0.4 },
+    { url: `${BASE}/returns`, changeFrequency: "monthly", priority: 0.4 },
+    { url: `${BASE}/faq`, changeFrequency: "monthly", priority: 0.4 },
+    { url: `${BASE}/terms`, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${BASE}/privacy`, changeFrequency: "yearly", priority: 0.3 },
     ...productUrls,
   ];
 }

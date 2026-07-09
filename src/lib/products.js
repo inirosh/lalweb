@@ -36,6 +36,7 @@ function mapProduct(row) {
     warranty: row.warranty,
     shortDescription: row.short_description,
     description: row.description,
+    specifications: row.specifications || null,
     image: row.image,
     gallery: Array.isArray(row.gallery) ? row.gallery : [],
   };

@@ -167,6 +167,12 @@ export default function ProductForm({ action, product, submitLabel, cost }) {
         </div>
 
         <div className="sm:col-span-2">
+          <label className={labelCls}>Specifications</label>
+          <textarea name="specifications" defaultValue={p.specifications} rows={5} className={field} placeholder={"One per line, as  Label: Value\n\nPower: 500W\nVoltage: 230V / 50Hz\nNo-load speed: 11,000 rpm\nDisc size: 100mm\nWeight: 2.1 kg"} />
+          <p className="mt-1 text-xs text-gray-400">Type one spec per line like <b>Power: 500W</b>. Shown as a neat table on the product page.</p>
+        </div>
+
+        <div className="sm:col-span-2">
           <label className={labelCls}>Product photo</label>
           {p.image && (
             /* eslint-disable-next-line @next/next/no-img-element */

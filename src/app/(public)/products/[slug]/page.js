@@ -152,6 +152,34 @@ export default async function ProductDetailPage({ params }) {
         </div>
       </div>
 
+      {/* Specifications */}
+      {product.specifications && (
+        <div className="mt-10">
+          <h2 className="text-lg font-black text-gray-900">{tr("product.specs")}</h2>
+          <div className="mt-3 overflow-hidden rounded-xl border border-gray-200">
+            <table className="w-full text-sm">
+              <tbody className="divide-y divide-gray-100">
+                {product.specifications
+                  .split("\n")
+                  .map((line) => line.trim())
+                  .filter(Boolean)
+                  .map((line, i) => {
+                    const idx = line.indexOf(":");
+                    const label = idx > -1 ? line.slice(0, idx).trim() : line;
+                    const value = idx > -1 ? line.slice(idx + 1).trim() : "";
+                    return (
+                      <tr key={i} className={i % 2 ? "bg-gray-50" : "bg-white"}>
+                        <td className="w-1/2 px-4 py-2.5 font-semibold text-gray-700">{label}</td>
+                        <td className="px-4 py-2.5 text-gray-900">{value}</td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
       <div className="mt-10">
         <Link href="/products" className="text-sm font-bold text-brand-red hover:underline">
           {tr("product.back")}

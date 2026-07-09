@@ -119,6 +119,7 @@ function readForm(formData) {
     warranty: String(formData.get("warranty") || "").trim() || null,
     short_description: String(formData.get("short_description") || "").trim() || null,
     description: String(formData.get("description") || "").trim() || null,
+    specifications: String(formData.get("specifications") || "").trim() || null,
     image: String(formData.get("image") || "").trim() || null,
   };
 }

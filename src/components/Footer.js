@@ -9,7 +9,7 @@ export default async function Footer() {
   const tr = (k) => t(lang, k);
   return (
     <footer className="mt-16 bg-brand-dark text-gray-300">
-      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-2 md:grid-cols-3">
+      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-2 md:grid-cols-4">
         {/* About */}
         <div>
           <h3 className="mb-3 text-lg font-extrabold text-brand-yellow">
@@ -30,6 +30,20 @@ export default async function Footer() {
             <li><Link href="/products" className="hover:text-brand-yellow">{tr("nav.products")}</Link></li>
             <li><Link href="/about" className="hover:text-brand-yellow">{tr("nav.about")}</Link></li>
             <li><Link href="/contact" className="hover:text-brand-yellow">{tr("nav.contact")}</Link></li>
+          </ul>
+        </div>
+
+        {/* Customer Care */}
+        <div>
+          <h3 className="mb-3 text-sm font-bold uppercase tracking-wide text-white">
+            {tr("footer.help")}
+          </h3>
+          <ul className="space-y-2 text-sm">
+            <li><Link href="/delivery" className="hover:text-brand-yellow">{tr("link.delivery")}</Link></li>
+            <li><Link href="/returns" className="hover:text-brand-yellow">{tr("link.returns")}</Link></li>
+            <li><Link href="/faq" className="hover:text-brand-yellow">{tr("link.faq")}</Link></li>
+            <li><Link href="/terms" className="hover:text-brand-yellow">{tr("link.terms")}</Link></li>
+            <li><Link href="/privacy" className="hover:text-brand-yellow">{tr("link.privacy")}</Link></li>
           </ul>
         </div>
 
