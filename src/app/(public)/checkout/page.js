@@ -7,12 +7,14 @@ import { formatPrice } from "@/lib/products";
 import { getActiveCoupons, validateCoupon } from "@/lib/coupons";
 import { SHOP, whatsappLink } from "@/lib/shop";
 import { IconWhatsApp, IconTruck } from "@/components/icons";
+import { createOrder } from "./actions";
 
 export default function CheckoutPage() {
   const { items, subtotal, clear, loaded } = useCart();
   const [form, setForm] = useState({ name: "", phone: "", address: "", note: "" });
   const [errors, setErrors] = useState({});
   const [placed, setPlaced] = useState(false);
+  const [placing, setPlacing] = useState(false);
 
   // Coupons
   const [coupons, setCoupons] = useState([]);
@@ -57,9 +59,29 @@ export default function CheckoutPage() {
     return Object.keys(e).length === 0;
   }
 
-  function placeOrder() {
-    if (!validate() || items.length === 0) return;
+  async function placeOrder() {
+    if (!validate() || items.length === 0 || placing) return;
+    setPlacing(true);
 
+    // 1) Save the order to the database (non-blocking — if it fails,
+    //    we still send the WhatsApp order so no sale is lost).
+    let orderNumber = null;
+    try {
+      const res = await createOrder({
+        name: form.name,
+        phone: form.phone,
+        address: form.address,
+        note: form.note,
+        items: items.map((i) => ({ slug: i.slug, name: i.name, price: i.price, qty: i.qty })),
+        subtotal,
+        discount,
+        couponCode: applied?.code || null,
+        total,
+      });
+      if (res?.orderNumber) orderNumber = res.orderNumber;
+    } catch {}
+
+    // 2) Build the WhatsApp message
     const origin = typeof window !== "undefined" ? window.location.origin : "";
     const lines = items.map(
       (it, i) =>
@@ -67,8 +89,9 @@ export default function CheckoutPage() {
     );
 
     const message =
-      `*NEW ORDER — ${SHOP.name}*\n\n` +
-      `*Customer:* ${form.name}\n` +
+      `*NEW ORDER — ${SHOP.name}*\n` +
+      (orderNumber ? `*Order No:* ${orderNumber}\n` : "") +
+      `\n*Customer:* ${form.name}\n` +
       `*Phone:* ${form.phone}\n` +
       `*Address:* ${form.address}\n` +
       (form.note.trim() ? `*Note:* ${form.note}\n` : "") +
@@ -78,10 +101,11 @@ export default function CheckoutPage() {
       `Delivery: FREE\n` +
       `*TOTAL (Cash on Delivery): ${formatPrice(total)}*`;
 
-    // Open WhatsApp to the shop with the pre-filled order
+    // 3) Open WhatsApp to the shop with the pre-filled order
     window.open(whatsappLink(message), "_blank");
     clear();
     setPlaced(true);
+    setPlacing(false);
   }
 
   // Success screen
@@ -193,9 +217,10 @@ export default function CheckoutPage() {
 
       <button
         onClick={placeOrder}
-        className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-green-600 py-4 text-lg font-bold text-white shadow-lg hover:bg-green-700"
+        disabled={placing}
+        className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-green-600 py-4 text-lg font-bold text-white shadow-lg hover:bg-green-700 disabled:opacity-60"
       >
-        <IconWhatsApp width={22} height={22} /> Order Now via WhatsApp
+        <IconWhatsApp width={22} height={22} /> {placing ? "Placing order…" : "Order Now via WhatsApp"}
       </button>
       <p className="mt-2 text-center text-xs text-gray-400">
         Tapping this opens WhatsApp with your order ready to send to {SHOP.phoneDisplay}.

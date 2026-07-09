@@ -9,7 +9,7 @@ export async function getDashboardStats() {
   const supabase = createAdminClient();
 
   // Pull the raw data we need.
-  const [{ data: invoices }, { data: items }, { data: products }] =
+  const [{ data: invoices }, { data: items }, { data: products }, ordersRes] =
     await Promise.all([
       supabase
         .from("invoices")
@@ -19,7 +19,23 @@ export async function getDashboardStats() {
       supabase
         .from("products")
         .select("id, name, stock_qty, low_stock_threshold"),
+      supabase
+        .from("orders")
+        .select("id, order_number, customer_name, total, status, created_at")
+        .order("created_at", { ascending: false }),
     ]);
+
+  // Online orders (table may not exist yet → empty).
+  const orders = ordersRes?.error ? [] : ordersRes?.data || [];
+  const newOrders = orders.filter((o) => o.status === "new");
+  const recentOrders = orders.slice(0, 5).map((o) => ({
+    id: o.id,
+    orderNumber: o.order_number,
+    customerName: o.customer_name,
+    total: Number(o.total || 0),
+    status: o.status,
+    createdAt: o.created_at,
+  }));
 
   const allInvoices = invoices || [];
 
@@ -70,5 +86,7 @@ export async function getDashboardStats() {
     bestSellers,
     lowStock,
     recent,
+    newOrdersCount: newOrders.length,
+    recentOrders,
   };
 }

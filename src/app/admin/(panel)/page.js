@@ -22,11 +22,19 @@ export default async function AdminDashboardPage() {
       <h1 className="text-2xl font-black text-gray-900">Dashboard</h1>
       <p className="mt-1 text-gray-500">Your shop at a glance.</p>
 
+      {/* New orders alert */}
+      {s.newOrdersCount > 0 && (
+        <Link href="/admin/orders" className="mt-6 flex items-center justify-between rounded-2xl border border-blue-200 bg-blue-50 px-5 py-4 shadow-sm hover:bg-blue-100">
+          <span className="font-bold text-blue-800">🛒 {s.newOrdersCount} new order{s.newOrdersCount !== 1 ? "s" : ""} to review</span>
+          <span className="text-sm font-bold text-blue-700">View →</span>
+        </Link>
+      )}
+
       {/* Sales stats */}
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard label="Sales Today" value={formatPrice(s.totalSalesToday)} sub={`${s.countToday} bill${s.countToday !== 1 ? "s" : ""}`} accent="text-brand-red" />
         <StatCard label="Sales This Month" value={formatPrice(s.totalSalesMonth)} sub={`${s.countMonth} bill${s.countMonth !== 1 ? "s" : ""}`} accent="text-brand-red" />
-        <StatCard label="Sales All Time" value={formatPrice(s.totalSalesAll)} sub={`${s.countAll} bill${s.countAll !== 1 ? "s" : ""}`} />
+        <StatCard label="New Orders" value={s.newOrdersCount} sub="online, to review" accent={s.newOrdersCount > 0 ? "text-blue-600" : "text-gray-900"} />
         <StatCard label="Low-Stock Items" value={s.lowStock.length} sub="need attention" accent={s.lowStock.length > 0 ? "text-amber-600" : "text-green-600"} />
       </div>
 
