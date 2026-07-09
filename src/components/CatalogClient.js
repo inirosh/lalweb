@@ -3,8 +3,10 @@
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import ProductCard from "./ProductCard";
+import { useLang } from "./LanguageProvider";
 
 export default function CatalogClient({ products, categories }) {
+  const { t } = useLang();
   const searchParams = useSearchParams();
   // Start on the category from the URL (e.g. coming from the homepage), else "all"
   const initial = searchParams.get("category") || "all";
@@ -25,7 +27,7 @@ export default function CatalogClient({ products, categories }) {
     return matchCategory && matchStock && matchQuery;
   });
 
-  const filterButtons = [{ slug: "all", name: "All" }, ...categories];
+  const filterButtons = [{ slug: "all", name: t("catalog.all") }, ...categories];
 
   return (
     <div className="mt-6">
@@ -41,7 +43,7 @@ export default function CatalogClient({ products, categories }) {
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search tools, brands… e.g. drill, EMTOP, washer"
+          placeholder={t("catalog.search")}
           className="w-full rounded-full border border-gray-300 bg-white py-3.5 pl-12 pr-4 text-gray-900 shadow-sm outline-none transition-shadow focus:border-brand-orange focus:shadow-md"
         />
         {query && (
@@ -83,19 +85,17 @@ export default function CatalogClient({ products, categories }) {
             onChange={(e) => setStockOnly(e.target.checked)}
             className="h-4 w-4 accent-brand-orange"
           />
-          Show in-stock only
+          {t("catalog.inStockOnly")}
         </label>
         <span className="text-sm text-gray-500">
-          {filtered.length} product{filtered.length !== 1 ? "s" : ""}
+          {filtered.length} {t("catalog.unit")}
         </span>
       </div>
 
       {/* Product grid */}
       {filtered.length === 0 ? (
         <p className="mt-10 text-center text-gray-500">
-          {q
-            ? `No products match “${query}”. Try a different word.`
-            : "No products found in this category."}
+          {q ? t("catalog.noMatch") : t("catalog.none")}
         </p>
       ) : (
         <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">

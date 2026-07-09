@@ -5,10 +5,12 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { SHOP } from "@/lib/shop";
 import { IconChevronRight } from "./icons";
+import { useLang } from "./LanguageProvider";
 
 // Shows uploaded hero banners (auto-rotating carousel if more than one).
 // Falls back to the default gradient banner when none are uploaded.
 export default function HeroBanner({ banners }) {
+  const { t } = useLang();
   const [index, setIndex] = useState(0);
   const list = banners || [];
 
@@ -25,14 +27,14 @@ export default function HeroBanner({ banners }) {
         <div className="brand-gradient anim-gradient relative overflow-hidden rounded-2xl px-5 py-5 sm:px-8 sm:py-8">
           <div className="relative z-10 max-w-[62%] sm:max-w-[70%]">
             <span className="inline-block rounded-full bg-white/20 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
-              Official EMTOP Distributor
+              {t("banner.official")}
             </span>
             <h1 className="mt-2 text-xl font-black leading-tight text-white sm:text-3xl">
-              Power Tools &amp; Home Appliances
+              {t("banner.title")}
             </h1>
-            <p className="mt-1 text-xs text-white/90 sm:text-sm">Value for money · {SHOP.location}</p>
+            <p className="mt-1 text-xs text-white/90 sm:text-sm">{t("banner.value")} · {SHOP.location}</p>
             <Link href="/products" className="mt-3 inline-flex items-center gap-1 rounded-full bg-white px-4 py-2 text-xs font-bold text-brand-red shadow sm:text-sm">
-              Shop Now <IconChevronRight width={14} height={14} />
+              {t("btn.shopNow")} <IconChevronRight width={14} height={14} />
             </Link>
           </div>
           <img

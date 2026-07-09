@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { SHOP, telLink } from "@/lib/shop";
 import { CATEGORIES } from "@/lib/products";
+import { getLang } from "@/lib/getLang";
+import { t } from "@/lib/i18n";
 
 export const metadata = {
   title: "About Us | Lal Distributors — Wadduwa",
@@ -8,12 +10,14 @@ export const metadata = {
     "Learn about Lal Distributors & Tools Shop in Wadduwa, Sri Lanka — your trusted local source for power tools and home appliances.",
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const lang = await getLang();
+  const tr = (k) => t(lang, k);
   return (
     <div>
       {/* Header band */}
       <section className="bg-brand-dark py-14 text-center text-white">
-        <h1 className="text-3xl font-black sm:text-4xl">About Us</h1>
+        <h1 className="text-3xl font-black sm:text-4xl">{tr("about.title")}</h1>
         <p className="mt-2 text-brand-yellow">{SHOP.tagline}</p>
       </section>
 
@@ -38,7 +42,7 @@ export default function AboutPage() {
         </p>
 
         {/* What we sell */}
-        <h3 className="mt-10 text-lg font-black text-gray-900">What We Sell</h3>
+        <h3 className="mt-10 text-lg font-black text-gray-900">{tr("about.whatWeSell")}</h3>
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
           {CATEGORIES.map((cat) => (
             <div
@@ -51,7 +55,7 @@ export default function AboutPage() {
         </div>
 
         {/* Why choose us */}
-        <h3 className="mt-10 text-lg font-black text-gray-900">Why Choose Us</h3>
+        <h3 className="mt-10 text-lg font-black text-gray-900">{tr("about.whyUs")}</h3>
         <ul className="mt-4 space-y-3">
           {[
             ["🏆", "Trusted local business in Wadduwa"],
@@ -69,7 +73,7 @@ export default function AboutPage() {
         {/* CTA */}
         <div className="brand-gradient mt-12 flex flex-col items-center justify-between gap-4 rounded-2xl px-6 py-8 text-center md:flex-row md:text-left">
           <p className="text-lg font-black text-white">
-            Visit us in {SHOP.location} or contact us today!
+            {tr("about.contactCta")}
           </p>
           <div className="flex gap-3">
             <a href={telLink} className="rounded-full bg-white px-6 py-3 font-bold text-brand-red shadow hover:bg-gray-100">

@@ -12,6 +12,8 @@ import {
   getCategoryName,
   formatPrice,
 } from "@/lib/products";
+import { getLang } from "@/lib/getLang";
+import { t } from "@/lib/i18n";
 
 // Always fetch fresh so stock/price changes show up right away
 export const dynamic = "force-dynamic";
@@ -48,8 +50,9 @@ export async function generateMetadata({ params }) {
 
 export default async function ProductDetailPage({ params }) {
   const { slug } = await params;
-  const product = await getProductBySlug(slug);
+  const [product, lang] = await Promise.all([getProductBySlug(slug), getLang()]);
   if (!product) notFound();
+  const tr = (k) => t(lang, k);
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 pb-24 md:pb-8">
@@ -75,9 +78,9 @@ export default async function ProductDetailPage({ params }) {
 
       {/* Breadcrumb */}
       <nav className="mb-6 text-sm text-gray-500">
-        <Link href="/" className="hover:text-brand-red">Home</Link>
+        <Link href="/" className="hover:text-brand-red">{tr("nav.home")}</Link>
         <span className="mx-2">/</span>
-        <Link href="/products" className="hover:text-brand-red">Products</Link>
+        <Link href="/products" className="hover:text-brand-red">{tr("nav.products")}</Link>
         <span className="mx-2">/</span>
         <span className="font-semibold text-gray-700">{product.name}</span>
       </nav>
@@ -95,7 +98,7 @@ export default async function ProductDetailPage({ params }) {
             {product.name}
           </h1>
           {product.brand && (
-            <p className="mt-1 text-sm text-gray-500">Brand: {product.brand}</p>
+            <p className="mt-1 text-sm text-gray-500">{tr("product.brand")}: {product.brand}</p>
           )}
 
           {(() => {
@@ -118,7 +121,7 @@ export default async function ProductDetailPage({ params }) {
 
           {/* Free delivery */}
           <div className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-green-50 px-3 py-1.5 text-sm font-semibold text-green-700">
-            <IconTruck width={16} height={16} /> Free Delivery across Sri Lanka
+            <IconTruck width={16} height={16} /> {tr("product.freeDeliveryFull")}
           </div>
 
           <p className="mt-5 leading-relaxed text-gray-700">
@@ -142,7 +145,7 @@ export default async function ProductDetailPage({ params }) {
           {/* Inquiry */}
           <div className="mt-4">
             <p className="mb-3 text-sm font-semibold text-gray-600">
-              Or ask us a question:
+              {tr("inquiry.prompt")}
             </p>
             <InquiryButtons productName={product.name} />
           </div>
@@ -151,7 +154,7 @@ export default async function ProductDetailPage({ params }) {
 
       <div className="mt-10">
         <Link href="/products" className="text-sm font-bold text-brand-red hover:underline">
-          ← Back to all products
+          {tr("product.back")}
         </Link>
       </div>
 

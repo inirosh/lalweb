@@ -1,4 +1,6 @@
 import { SHOP, telLink, whatsappLink } from "@/lib/shop";
+import { getLang } from "@/lib/getLang";
+import { t } from "@/lib/i18n";
 
 export const metadata = {
   title: "Contact | Lal Distributors — Wadduwa",
@@ -6,28 +8,30 @@ export const metadata = {
     "Contact Lal Distributors in Wadduwa, Sri Lanka. Call 071 247 3281, email or find us on the map.",
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const lang = await getLang();
+  const tr = (k) => t(lang, k);
   const contactItems = [
-    { icon: "📞", label: "Phone", value: SHOP.phoneDisplay, href: telLink },
-    { icon: "✉️", label: "Email", value: SHOP.email, href: `mailto:${SHOP.email}` },
+    { icon: "📞", label: tr("contact.phone"), value: SHOP.phoneDisplay, href: telLink },
+    { icon: "✉️", label: tr("contact.email"), value: SHOP.email, href: `mailto:${SHOP.email}` },
     { icon: "📷", label: "Instagram", value: `@${SHOP.instagram}`, href: SHOP.instagramUrl },
-    { icon: "📍", label: "Location", value: SHOP.location, href: null },
-    { icon: "🕒", label: "Hours", value: SHOP.hours, href: null },
+    { icon: "📍", label: tr("contact.location"), value: SHOP.location, href: null },
+    { icon: "🕒", label: tr("contact.hours"), value: SHOP.hours, href: null },
   ];
 
   return (
     <div>
       {/* Header band */}
       <section className="bg-brand-dark py-14 text-center text-white">
-        <h1 className="text-3xl font-black sm:text-4xl">Contact Us</h1>
-        <p className="mt-2 text-brand-yellow">We&apos;re here to help</p>
+        <h1 className="text-3xl font-black sm:text-4xl">{tr("contact.title")}</h1>
+        <p className="mt-2 text-brand-yellow">{SHOP.tagline}</p>
       </section>
 
       <div className="mx-auto max-w-5xl px-4 py-12">
         <div className="grid gap-8 md:grid-cols-2">
           {/* Contact details */}
           <div>
-            <h2 className="text-2xl font-black text-gray-900">Get in Touch</h2>
+            <h2 className="text-2xl font-black text-gray-900">{tr("contact.getInTouch")}</h2>
             <p className="mt-2 text-gray-600">
               Call or message us anytime — we&apos;re online 24/7.
             </p>
@@ -78,7 +82,7 @@ export default function ContactPage() {
 
           {/* Map */}
           <div>
-            <h2 className="text-2xl font-black text-gray-900">Find Us</h2>
+            <h2 className="text-2xl font-black text-gray-900">{tr("contact.findUs")}</h2>
             <p className="mt-2 text-gray-600">{SHOP.location}</p>
             <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200 shadow">
               <iframe
