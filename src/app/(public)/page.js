@@ -2,9 +2,10 @@ import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
 import VoucherStrip from "@/components/VoucherStrip";
 import Countdown from "@/components/Countdown";
+import HeroBanner from "@/components/HeroBanner";
 import { getAllProducts, CATEGORIES } from "@/lib/products";
 import { getActiveCoupons } from "@/lib/coupons";
-import { SHOP } from "@/lib/shop";
+import { getActiveBanners } from "@/lib/banners";
 import {
   IconWrench, IconDroplet, IconWind, IconBolt, IconHome, IconBag,
   IconChevronRight, IconShield, IconTruck, IconStar,
@@ -23,9 +24,10 @@ const CAT_ICONS = {
 };
 
 export default async function HomePage() {
-  const [products, coupons] = await Promise.all([
+  const [products, coupons, banners] = await Promise.all([
     getAllProducts(),
     getActiveCoupons(),
+    getActiveBanners(),
   ]);
   const deals = products.filter(
     (p) => p.offerPrice != null && p.offerPrice < p.price
@@ -33,34 +35,8 @@ export default async function HomePage() {
 
   return (
     <div className="mx-auto max-w-6xl px-3 pb-8 sm:px-4">
-      {/* ============ PROMO BANNER ============ */}
-      <section className="mt-3">
-        <div className="brand-gradient anim-gradient relative overflow-hidden rounded-2xl px-5 py-5 sm:px-8 sm:py-8">
-          <div className="relative z-10 max-w-[62%] sm:max-w-[70%]">
-            <span className="inline-block rounded-full bg-white/20 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
-              Official EMTOP Distributor
-            </span>
-            <h1 className="mt-2 text-xl font-black leading-tight text-white sm:text-3xl">
-              Power Tools &amp; Home Appliances
-            </h1>
-            <p className="mt-1 text-xs text-white/90 sm:text-sm">
-              Value for money · {SHOP.location}
-            </p>
-            <Link
-              href="/products"
-              className="mt-3 inline-flex items-center gap-1 rounded-full bg-white px-4 py-2 text-xs font-bold text-brand-red shadow sm:text-sm"
-            >
-              Shop Now <IconChevronRight width={14} height={14} />
-            </Link>
-          </div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://nafldzwawqvljotcxspw.supabase.co/storage/v1/object/public/product-images/emtop-cordless-drill-20v.png"
-            alt="EMTOP drill"
-            className="anim-float pointer-events-none absolute -right-2 bottom-0 top-0 my-auto h-[85%] object-contain drop-shadow-xl"
-          />
-        </div>
-      </section>
+      {/* ============ HERO BANNER (managed from admin) ============ */}
+      <HeroBanner banners={banners} />
 
       {/* ============ TRUST STRIP ============ */}
       <section className="mt-3 grid grid-cols-3 gap-2 rounded-2xl border border-gray-100 bg-white p-3 text-center shadow-sm">
