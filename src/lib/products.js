@@ -100,7 +100,13 @@ export function getCategoryName(slug) {
   return CATEGORIES.find((c) => c.slug === slug)?.name || slug;
 }
 
-// Format a number as Sri Lankan Rupees, e.g. 18500 -> "Rs 18,500"
+// Format a number as Sri Lankan Rupees, e.g. 18500 -> "රු 18,500.00"
 export function formatPrice(value) {
-  return "Rs " + Number(value).toLocaleString("en-LK");
+  return (
+    "රු " +
+    Number(value).toLocaleString("en-LK", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })
+  );
 }

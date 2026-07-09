@@ -36,7 +36,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-poppins), Arial, Helvetica, sans-serif;
+  font-family: var(--font-poppins), var(--font-sinhala), Arial, Helvetica, sans-serif;
 }
 
 /* Reusable brand gradient (orange -> red), used on hero + buttons */

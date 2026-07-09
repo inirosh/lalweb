@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ProductGallery from "@/components/ProductGallery";
 import ProductBuyBar from "@/components/ProductBuyBar";
+import JsonLd from "@/components/JsonLd";
 import StockBadge from "@/components/StockBadge";
 import InquiryButtons from "@/components/InquiryButtons";
 import AddToCartButton from "@/components/cart/AddToCartButton";
@@ -18,10 +19,30 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
-  if (!product) return { title: "Product not found | Lal Distributors" };
+  if (!product) return { title: "Product not found" };
+
+  const price = product.offerPrice ?? product.price;
+  const desc =
+    (product.shortDescription || product.description || "").slice(0, 160) +
+    ` — ${formatPrice(price)}. Free island-wide delivery, cash on delivery.`;
+  const image = product.image || "/logo.jpg";
+
   return {
-    title: `${product.name} | Lal Distributors`,
-    description: product.shortDescription,
+    title: product.name,
+    description: desc,
+    alternates: { canonical: `/products/${product.slug}` },
+    openGraph: {
+      type: "website",
+      title: `${product.name} — ${formatPrice(price)}`,
+      description: desc,
+      images: [{ url: image, alt: product.name }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${product.name} — ${formatPrice(price)}`,
+      description: desc,
+      images: [image],
+    },
   };
 }
 
@@ -32,6 +53,26 @@ export default async function ProductDetailPage({ params }) {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 pb-24 md:pb-8">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Product",
+          name: product.name,
+          image: product.image ? [product.image] : undefined,
+          description: product.description || product.shortDescription,
+          brand: product.brand ? { "@type": "Brand", name: product.brand } : undefined,
+          offers: {
+            "@type": "Offer",
+            priceCurrency: "LKR",
+            price: product.offerPrice ?? product.price,
+            availability: product.inStock
+              ? "https://schema.org/InStock"
+              : "https://schema.org/OutOfStock",
+            url: `https://lalweb.vercel.app/products/${product.slug}`,
+          },
+        }}
+      />
+
       {/* Breadcrumb */}
       <nav className="mb-6 text-sm text-gray-500">
         <Link href="/" className="hover:text-brand-red">Home</Link>

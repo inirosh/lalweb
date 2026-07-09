@@ -3,6 +3,8 @@ import ProductCard from "@/components/ProductCard";
 import VoucherStrip from "@/components/VoucherStrip";
 import Countdown from "@/components/Countdown";
 import HeroBanner from "@/components/HeroBanner";
+import JsonLd from "@/components/JsonLd";
+import { SHOP } from "@/lib/shop";
 import { getAllProducts, CATEGORIES } from "@/lib/products";
 import { getActiveCoupons } from "@/lib/coupons";
 import { getActiveBanners } from "@/lib/banners";
@@ -35,6 +37,33 @@ export default async function HomePage() {
 
   return (
     <div className="mx-auto max-w-6xl px-3 pb-8 sm:px-4">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "HardwareStore",
+          name: SHOP.name,
+          image: "https://lalweb.vercel.app/logo.jpg",
+          "@id": "https://lalweb.vercel.app",
+          url: "https://lalweb.vercel.app",
+          telephone: `+${SHOP.phoneIntl}`,
+          email: SHOP.email,
+          priceRange: "රු",
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "Wadduwa",
+            addressRegion: "Western Province",
+            addressCountry: "LK",
+          },
+          sameAs: [SHOP.instagramUrl],
+          openingHoursSpecification: {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+            opens: "00:00",
+            closes: "23:59",
+          },
+        }}
+      />
+
       {/* ============ HERO BANNER (managed from admin) ============ */}
       <HeroBanner banners={banners} />
 
