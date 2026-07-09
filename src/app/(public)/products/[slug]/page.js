@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import ProductImage from "@/components/ProductImage";
 import StockBadge from "@/components/StockBadge";
 import InquiryButtons from "@/components/InquiryButtons";
+import AddToCartButton from "@/components/cart/AddToCartButton";
+import { IconTruck, IconShield } from "@/components/icons";
 import {
   getProductBySlug,
   getCategoryName,
@@ -56,11 +58,27 @@ export default async function ProductDetailPage({ params }) {
             <p className="mt-1 text-sm text-gray-500">Brand: {product.brand}</p>
           )}
 
-          <div className="mt-4 flex items-center gap-4">
-            <span className="text-3xl font-black text-brand-red">
-              {formatPrice(product.price)}
-            </span>
-            <StockBadge inStock={product.inStock} />
+          {(() => {
+            const hasOffer = product.offerPrice != null && product.offerPrice < product.price;
+            const shown = hasOffer ? product.offerPrice : product.price;
+            const discount = hasOffer ? Math.round(((product.price - product.offerPrice) / product.price) * 100) : 0;
+            return (
+              <div className="mt-4 flex flex-wrap items-center gap-3">
+                <span className="text-3xl font-black text-brand-red">{formatPrice(shown)}</span>
+                {hasOffer && (
+                  <>
+                    <span className="text-lg text-gray-400 line-through">{formatPrice(product.price)}</span>
+                    <span className="rounded bg-brand-red px-2 py-0.5 text-xs font-bold text-white">-{discount}%</span>
+                  </>
+                )}
+                <StockBadge inStock={product.inStock} />
+              </div>
+            );
+          })()}
+
+          {/* Free delivery */}
+          <div className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-green-50 px-3 py-1.5 text-sm font-semibold text-green-700">
+            <IconTruck width={16} height={16} /> Free Delivery across Sri Lanka
           </div>
 
           <p className="mt-5 leading-relaxed text-gray-700">
@@ -68,17 +86,23 @@ export default async function ProductDetailPage({ params }) {
           </p>
 
           {/* Warranty */}
-          <div className="mt-5 flex items-center gap-2 rounded-lg bg-gray-50 px-4 py-3 text-sm">
-            <span className="text-lg">🛡️</span>
-            <span className="font-semibold text-gray-800">
-              {product.warranty}
-            </span>
+          {product.warranty && (
+            <div className="mt-5 flex items-center gap-2 rounded-lg bg-gray-50 px-4 py-3 text-sm">
+              <IconShield width={18} height={18} className="text-brand-red" />
+              <span className="font-semibold text-gray-800">{product.warranty}</span>
+            </div>
+          )}
+
+          {/* Buy actions */}
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+            <AddToCartButton product={product} mode="add" className="flex-1" />
+            <AddToCartButton product={product} mode="buy" className="flex-1" />
           </div>
 
           {/* Inquiry */}
-          <div className="mt-6">
+          <div className="mt-4">
             <p className="mb-3 text-sm font-semibold text-gray-600">
-              Interested? Contact us to buy or ask a question:
+              Or ask us a question:
             </p>
             <InquiryButtons productName={product.name} />
           </div>

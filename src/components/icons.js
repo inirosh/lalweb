@@ -206,3 +206,39 @@ export function IconPlug(props) {
     </svg>
   );
 }
+
+export function IconCart(props) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="9" cy="21" r="1.5" />
+      <circle cx="18" cy="21" r="1.5" />
+      <path d="M2 3h3l2.4 12.3a1.5 1.5 0 0 0 1.5 1.2h9.1a1.5 1.5 0 0 0 1.5-1.2L23 7H6" />
+    </svg>
+  );
+}
+
+export function IconPlus(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M12 5v14M5 12h14" />
+    </svg>
+  );
+}
+
+export function IconMinus(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M5 12h14" />
+    </svg>
+  );
+}
+
+export function IconTrash(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M3 6h18" />
+      <path d="M8 6V4h8v2" />
+      <path d="M6 6l1 14a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-14" />
+    </svg>
+  );
+}

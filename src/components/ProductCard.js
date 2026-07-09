@@ -2,6 +2,7 @@ import Link from "next/link";
 import ProductImage from "./ProductImage";
 import { formatPrice } from "@/lib/products";
 import { IconTruck, IconShield } from "./icons";
+import AddToCartButton from "./cart/AddToCartButton";
 
 export default function ProductCard({ product }) {
   const hasOffer =
@@ -12,10 +13,17 @@ export default function ProductCard({ product }) {
     : 0;
 
   return (
-    <Link
-      href={`/products/${product.slug}`}
-      className="group flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white transition-shadow hover:shadow-md"
-    >
+    <div className="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white transition-shadow hover:shadow-md">
+      {/* Quick add-to-cart (sits above the card link) */}
+      {product.inStock && (
+        <div className="absolute bottom-2 right-2 z-10">
+          <AddToCartButton product={product} mode="icon" />
+        </div>
+      )}
+      <Link
+        href={`/products/${product.slug}`}
+        className="flex flex-1 flex-col"
+      >
       {/* Image */}
       <div className="relative aspect-square overflow-hidden bg-gray-50">
         <ProductImage
@@ -67,6 +75,7 @@ export default function ProductCard({ product }) {
           </div>
         )}
       </div>
-    </Link>
+      </Link>
+    </div>
   );
 }

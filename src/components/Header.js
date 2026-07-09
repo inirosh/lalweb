@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { SHOP, telLink } from "@/lib/shop";
-import { IconSearch, IconPhone, IconMenu, IconClose } from "./icons";
+import { IconSearch, IconPhone, IconMenu, IconClose, IconCart } from "./icons";
+import { useCart } from "./cart/CartProvider";
 
 const NAV = [
   { href: "/", label: "Home" },
@@ -17,6 +18,7 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const { count } = useCart();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -119,12 +121,26 @@ export default function Header() {
             })}
           </nav>
 
-          <a
-            href={telLink}
-            className="brand-gradient inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold text-white shadow transition-transform hover:scale-105"
-          >
-            <IconPhone width={16} height={16} /> {SHOP.phoneDisplay}
-          </a>
+          <div className="flex items-center gap-1.5">
+            <Link
+              href="/cart"
+              aria-label="Cart"
+              className="relative rounded-full p-2.5 text-gray-700 hover:bg-gray-100"
+            >
+              <IconCart width={20} height={20} />
+              {count > 0 && (
+                <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-red px-1 text-[9px] font-bold text-white">
+                  {count > 99 ? "99+" : count}
+                </span>
+              )}
+            </Link>
+            <a
+              href={telLink}
+              className="brand-gradient inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold text-white shadow transition-transform hover:scale-105"
+            >
+              <IconPhone width={16} height={16} /> {SHOP.phoneDisplay}
+            </a>
+          </div>
         </div>
       </header>
     </>
