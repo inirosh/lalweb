@@ -78,6 +78,15 @@ async function uploadGalleryIfPresent(formData, supabase) {
   return urls;
 }
 
+// Save the (private) cost price into product_costs.
+async function upsertCost(supabase, productId, formData) {
+  const raw = String(formData.get("cost_price") || "").trim();
+  const cost = raw === "" ? 0 : Math.max(0, Number(raw) || 0);
+  await supabase
+    .from("product_costs")
+    .upsert({ product_id: productId, cost_price: cost, updated_at: new Date().toISOString() });
+}
+
 // Existing gallery (kept on edit) comes through as a JSON hidden field.
 function readExistingGallery(formData) {
   try {
@@ -138,7 +147,11 @@ export async function createProduct(prevState, formData) {
   // Gallery: keep existing + append newly uploaded.
   values.gallery = [...readExistingGallery(formData), ...(await uploadGalleryIfPresent(formData, supabase))];
 
-  const { error } = await supabase.from("products").insert(values);
+  const { data: created, error } = await supabase
+    .from("products")
+    .insert(values)
+    .select("id")
+    .single();
 
   if (error) {
     // A duplicate slug is the most common problem.
@@ -149,6 +162,7 @@ export async function createProduct(prevState, formData) {
     };
   }
 
+  await upsertCost(supabase, created.id, formData);
   refreshPages();
   redirect("/admin/products?saved=1");
 }
@@ -180,6 +194,7 @@ export async function updateProduct(id, prevState, formData) {
     };
   }
 
+  await upsertCost(supabase, id, formData);
   refreshPages();
   redirect("/admin/products?saved=1");
 }

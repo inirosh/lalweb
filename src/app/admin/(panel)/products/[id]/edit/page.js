@@ -2,13 +2,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ProductForm from "@/components/admin/ProductForm";
 import { getProductById } from "@/lib/products";
+import { getProductCost } from "@/lib/costs";
 import { updateProduct } from "../../actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function EditProductPage({ params }) {
   const { id } = await params;
-  const product = await getProductById(id);
+  const [product, cost] = await Promise.all([getProductById(id), getProductCost(id)]);
   if (!product) notFound();
 
   // Pre-fill the product id into the update action.
@@ -24,7 +25,7 @@ export default async function EditProductPage({ params }) {
         Update the details, then click Save changes.
       </p>
 
-      <ProductForm action={updateWithId} product={product} submitLabel="Save changes" />
+      <ProductForm action={updateWithId} product={product} cost={cost} submitLabel="Save changes" />
     </div>
   );
 }

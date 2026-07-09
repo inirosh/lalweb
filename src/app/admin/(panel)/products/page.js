@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getAllProducts, getCategoryName, formatPrice } from "@/lib/products";
+import { getAllCosts } from "@/lib/costs";
 import { deleteProduct } from "./actions";
 import DeleteProductButton from "@/components/admin/DeleteProductButton";
 
@@ -7,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminProductsPage({ searchParams }) {
   const params = await searchParams;
-  const products = await getAllProducts();
+  const [products, costs] = await Promise.all([getAllProducts(), getAllCosts()]);
 
   const lowStock = products.filter(
     (p) => p.stockQty > 0 && p.stockQty <= (p.lowStockThreshold ?? 3)
@@ -67,6 +68,8 @@ export default async function AdminProductsPage({ searchParams }) {
               <th className="px-4 py-3">Product</th>
               <th className="px-4 py-3">Category</th>
               <th className="px-4 py-3">Price</th>
+              <th className="px-4 py-3">Cost 🔒</th>
+              <th className="px-4 py-3">Profit</th>
               <th className="px-4 py-3">Stock</th>
               <th className="px-4 py-3 text-right">Actions</th>
             </tr>
@@ -75,6 +78,9 @@ export default async function AdminProductsPage({ searchParams }) {
             {products.map((p) => {
               const isOut = p.stockQty === 0;
               const isLow = !isOut && p.stockQty <= (p.lowStockThreshold ?? 3);
+              const cost = costs[p.id];
+              const sell = p.offerPrice != null && p.offerPrice < p.price ? p.offerPrice : p.price;
+              const profit = cost != null ? sell - cost : null;
               return (
                 <tr key={p.id} className="hover:bg-gray-50">
                   <td className="px-4 py-3">
@@ -90,6 +96,18 @@ export default async function AdminProductsPage({ searchParams }) {
                   </td>
                   <td className="px-4 py-3 font-semibold text-gray-900">
                     {formatPrice(p.price)}
+                  </td>
+                  <td className="px-4 py-3 text-gray-600">
+                    {cost != null && cost > 0 ? formatPrice(cost) : "—"}
+                  </td>
+                  <td className="px-4 py-3">
+                    {profit != null && cost > 0 ? (
+                      <span className={`font-semibold ${profit >= 0 ? "text-green-700" : "text-red-600"}`}>
+                        {formatPrice(profit)}
+                      </span>
+                    ) : (
+                      <span className="text-gray-400">—</span>
+                    )}
                   </td>
                   <td className="px-4 py-3">
                     <span

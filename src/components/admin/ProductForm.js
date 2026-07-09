@@ -21,10 +21,18 @@ function SubmitButton({ label }) {
 
 // `action` is a server action with signature (prevState, formData).
 // `product` is the existing product when editing (null when adding).
-export default function ProductForm({ action, product, submitLabel }) {
+export default function ProductForm({ action, product, submitLabel, cost }) {
   const [state, formAction] = useActionState(action, null);
   const [photoNote, setPhotoNote] = useState("");
   const p = product || {};
+
+  // Live profit hint (private) as the owner types price/sale/cost.
+  const [priceV, setPriceV] = useState(p.price ?? "");
+  const [offerV, setOfferV] = useState(p.offerPrice ?? "");
+  const [costV, setCostV] = useState(cost ?? "");
+  const sell = Number(offerV) > 0 ? Number(offerV) : Number(priceV) || 0;
+  const profit = sell - (Number(costV) || 0);
+  const margin = sell > 0 ? Math.round((profit / sell) * 100) : 0;
 
   // Compress the chosen photo in the browser before it uploads.
   async function handleFileChange(e) {
@@ -100,14 +108,31 @@ export default function ProductForm({ action, product, submitLabel }) {
         </div>
 
         <div>
-          <label className={labelCls}>Price (Rs) *</label>
-          <input name="price" type="number" min="0" step="0.01" defaultValue={p.price} required className={field} placeholder="12500" />
+          <label className={labelCls}>Selling price (Rs) *</label>
+          <input name="price" type="number" min="0" step="0.01" defaultValue={p.price} onChange={(e) => setPriceV(e.target.value)} required className={field} placeholder="12500" />
         </div>
 
         <div>
           <label className={labelCls}>Sale price (Rs) — optional</label>
-          <input name="offer_price" type="number" min="0" step="0.01" defaultValue={p.offerPrice ?? ""} className={field} placeholder="e.g. 9900 (leave blank for no offer)" />
+          <input name="offer_price" type="number" min="0" step="0.01" defaultValue={p.offerPrice ?? ""} onChange={(e) => setOfferV(e.target.value)} className={field} placeholder="e.g. 9900 (leave blank for no offer)" />
           <p className="mt-1 text-xs text-gray-400">If set lower than the price, the product shows a discount badge.</p>
+        </div>
+
+        <div>
+          <label className={labelCls}>Cost price (Rs) — private 🔒</label>
+          <input name="cost_price" type="number" min="0" step="0.01" defaultValue={cost ?? ""} onChange={(e) => setCostV(e.target.value)} className={field} placeholder="What you paid" />
+          <p className="mt-1 text-xs text-gray-400">Only you can see this — never shown to customers.</p>
+        </div>
+
+        <div className="flex items-end">
+          <div className={`w-full rounded-lg border px-3 py-2 text-sm ${profit >= 0 ? "border-green-200 bg-green-50 text-green-800" : "border-red-200 bg-red-50 text-red-700"}`}>
+            <span className="font-semibold">Profit / unit:</span>{" "}
+            {Number(costV) > 0 ? (
+              <>රු {profit.toLocaleString("en-LK", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <span className="opacity-70">({margin}%)</span></>
+            ) : (
+              <span className="opacity-60">enter cost to see</span>
+            )}
+          </div>
         </div>
 
         <div>
