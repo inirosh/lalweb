@@ -1,10 +1,14 @@
+"use client";
+
 import Link from "next/link";
 import ProductImage from "./ProductImage";
 import { formatPrice } from "@/lib/products";
 import { IconTruck, IconShield } from "./icons";
 import AddToCartButton from "./cart/AddToCartButton";
+import { useLang } from "./LanguageProvider";
 
 export default function ProductCard({ product }) {
+  const { t } = useLang();
   const hasOffer =
     product.offerPrice != null && product.offerPrice < product.price;
   const shownPrice = hasOffer ? product.offerPrice : product.price;
@@ -37,7 +41,7 @@ export default function ProductCard({ product }) {
         )}
         {!product.inStock && (
           <span className="absolute inset-0 flex items-center justify-center bg-white/70 text-sm font-bold text-gray-700">
-            Out of Stock
+            {t("badge.outOfStock")}
           </span>
         )}
       </div>
@@ -63,7 +67,7 @@ export default function ProductCard({ product }) {
         {/* Free delivery tag */}
         <div className="mt-1.5">
           <span className="inline-flex items-center gap-1 rounded bg-green-50 px-1.5 py-0.5 text-[10px] font-bold text-green-700">
-            <IconTruck width={11} height={11} /> Free Delivery
+            <IconTruck width={11} height={11} /> {t("badge.freeDelivery")}
           </span>
         </div>
 

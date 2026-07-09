@@ -8,6 +8,8 @@ import { SHOP } from "@/lib/shop";
 import { getAllProducts, CATEGORIES } from "@/lib/products";
 import { getActiveCoupons } from "@/lib/coupons";
 import { getActiveBanners } from "@/lib/banners";
+import { getLang } from "@/lib/getLang";
+import { t } from "@/lib/i18n";
 import {
   IconWrench, IconDroplet, IconWind, IconBolt, IconHome, IconBag,
   IconChevronRight, IconShield, IconTruck, IconStar,
@@ -26,11 +28,13 @@ const CAT_ICONS = {
 };
 
 export default async function HomePage() {
-  const [products, coupons, banners] = await Promise.all([
+  const [products, coupons, banners, lang] = await Promise.all([
     getAllProducts(),
     getActiveCoupons(),
     getActiveBanners(),
+    getLang(),
   ]);
+  const tr = (k) => t(lang, k);
   const deals = products.filter(
     (p) => p.offerPrice != null && p.offerPrice < p.price
   );
@@ -70,14 +74,14 @@ export default async function HomePage() {
       {/* ============ TRUST STRIP ============ */}
       <section className="mt-3 grid grid-cols-3 gap-2 rounded-2xl border border-gray-100 bg-white p-3 text-center shadow-sm">
         {[
-          [IconShield, "Warranty", "on eligible items"],
-          [IconTruck, "Genuine", "EMTOP stock"],
-          [IconStar, "Trusted", "16K+ followers"],
-        ].map(([Icon, title, sub]) => (
-          <div key={title} className="flex flex-col items-center gap-1">
+          [IconShield, "trust.warranty", "trust.warrantySub"],
+          [IconTruck, "trust.genuine", "trust.genuineSub"],
+          [IconStar, "trust.trusted", "trust.trustedSub"],
+        ].map(([Icon, titleKey, subKey]) => (
+          <div key={titleKey} className="flex flex-col items-center gap-1">
             <Icon width={20} height={20} className="text-brand-red" />
-            <span className="text-[11px] font-bold text-gray-800 sm:text-xs">{title}</span>
-            <span className="hidden text-[10px] text-gray-400 sm:block">{sub}</span>
+            <span className="text-[11px] font-bold text-gray-800 sm:text-xs">{tr(titleKey)}</span>
+            <span className="hidden text-[10px] text-gray-400 sm:block">{tr(subKey)}</span>
           </div>
         ))}
       </section>
@@ -91,10 +95,10 @@ export default async function HomePage() {
           <div className="mb-3 flex items-center justify-between">
             <h2 className="flex items-center gap-1.5 text-base font-black text-brand-red">
               <IconBolt width={18} height={18} />
-              Flash Sale
+              {tr("home.flashSale")}
             </h2>
             <Link href="/products" className="flex items-center text-xs font-bold text-brand-red">
-              See all <IconChevronRight width={14} height={14} />
+              {tr("btn.seeAll")} <IconChevronRight width={14} height={14} />
             </Link>
           </div>
           <div className="flex gap-3 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -103,7 +107,7 @@ export default async function HomePage() {
                 <ProductCard product={product} />
                 {product.offerEnds && (
                   <div className="mt-1.5 text-center">
-                    <span className="text-[10px] font-bold uppercase text-gray-500">Ends in</span>
+                    <span className="text-[10px] font-bold uppercase text-gray-500">{tr("home.endsIn")}</span>
                     <div className="mt-0.5 flex justify-center">
                       <Countdown endsAt={product.offerEnds} />
                     </div>
@@ -117,7 +121,7 @@ export default async function HomePage() {
 
       {/* ============ CATEGORIES ============ */}
       <section className="mt-5 rounded-2xl border border-gray-100 bg-white p-3 shadow-sm sm:p-4">
-        <h2 className="mb-3 text-sm font-black text-gray-900 sm:text-base">Categories</h2>
+        <h2 className="mb-3 text-sm font-black text-gray-900 sm:text-base">{tr("home.categories")}</h2>
         <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 sm:gap-3">
           {CATEGORIES.map((cat) => {
             const Icon = CAT_ICONS[cat.slug] || IconBag;
@@ -142,9 +146,9 @@ export default async function HomePage() {
       {/* ============ PRODUCT FEED ============ */}
       <section className="mt-5">
         <div className="mb-2.5 flex items-center justify-between">
-          <h2 className="text-base font-black text-gray-900">Just For You</h2>
+          <h2 className="text-base font-black text-gray-900">{tr("home.justForYou")}</h2>
           <Link href="/products" className="flex items-center text-xs font-bold text-brand-red">
-            View all <IconChevronRight width={14} height={14} />
+            {tr("btn.viewAll")} <IconChevronRight width={14} height={14} />
           </Link>
         </div>
         <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5">

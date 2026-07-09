@@ -5,11 +5,13 @@ import { usePathname } from "next/navigation";
 import { SHOP, telLink, whatsappLink } from "@/lib/shop";
 import { IconHome, IconGrid, IconCart, IconWhatsApp, IconPhone } from "./icons";
 import { useCart } from "./cart/CartProvider";
+import { useLang } from "./LanguageProvider";
 
 // Fixed bottom tab bar for mobile (Daraz-style). Hidden on desktop.
 export default function MobileNav() {
   const pathname = usePathname();
   const { count } = useCart();
+  const { t } = useLang();
 
   // On a product detail page the sticky buy bar replaces this tab bar.
   if (/^\/products\/.+/.test(pathname)) return null;
@@ -26,11 +28,11 @@ export default function MobileNav() {
     <nav className="fixed inset-x-0 bottom-0 z-40 flex items-stretch border-t border-gray-200 bg-white/95 backdrop-blur-md md:hidden">
       <Link href="/" className={linkCls(isActive("/"))}>
         <IconHome width={21} height={21} />
-        Home
+        {t("nav.home")}
       </Link>
       <Link href="/products" className={linkCls(isActive("/products"))}>
         <IconGrid width={21} height={21} />
-        Products
+        {t("nav.products")}
       </Link>
       <Link href="/cart" className={linkCls(isActive("/cart"))}>
         <span className="relative">
@@ -41,7 +43,7 @@ export default function MobileNav() {
             </span>
           )}
         </span>
-        Cart
+        {t("nav.cart")}
       </Link>
       <a
         href={whatsappLink("Hello Lal Distributors, I have a question.")}
@@ -50,7 +52,7 @@ export default function MobileNav() {
         className="flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-[10px] font-semibold text-green-600"
       >
         <IconWhatsApp width={21} height={21} />
-        WhatsApp
+        {t("nav.whatsapp")}
       </a>
       <a
         href={telLink}
@@ -58,7 +60,7 @@ export default function MobileNav() {
         aria-label={`Call ${SHOP.phoneDisplay}`}
       >
         <IconPhone width={21} height={21} />
-        Call
+        {t("nav.call")}
       </a>
     </nav>
   );

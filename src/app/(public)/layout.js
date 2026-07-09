@@ -4,10 +4,14 @@ import MobileNav from "@/components/MobileNav";
 import ScrollProgress from "@/components/anim/ScrollProgress";
 import WhatsAppWidget from "@/components/WhatsAppWidget";
 import { CartProvider } from "@/components/cart/CartProvider";
+import { LanguageProvider } from "@/components/LanguageProvider";
+import { getLang } from "@/lib/getLang";
 
 // Wraps all public (customer-facing) pages with the shop header and footer.
-export default function PublicLayout({ children }) {
+export default async function PublicLayout({ children }) {
+  const lang = await getLang();
   return (
+   <LanguageProvider initialLang={lang}>
     <CartProvider>
       <div className="flex min-h-screen flex-col">
         <ScrollProgress />
@@ -21,5 +25,6 @@ export default function PublicLayout({ children }) {
         <div className="h-14 md:hidden" aria-hidden="true" />
       </div>
     </CartProvider>
+   </LanguageProvider>
   );
 }

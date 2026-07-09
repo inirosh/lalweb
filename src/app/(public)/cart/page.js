@@ -3,20 +3,22 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { useCart } from "@/components/cart/CartProvider";
+import { useLang } from "@/components/LanguageProvider";
 import { formatPrice } from "@/lib/products";
 import { IconPlus, IconMinus, IconTrash, IconTruck, IconCart } from "@/components/icons";
 
 export default function CartPage() {
   const { items, setQty, removeItem, subtotal, loaded } = useCart();
+  const { t } = useLang();
 
   if (loaded && items.length === 0) {
     return (
       <div className="mx-auto max-w-md px-4 py-16 text-center">
         <IconCart width={56} height={56} className="mx-auto text-gray-300" />
-        <h1 className="mt-4 text-xl font-black text-gray-900">Your cart is empty</h1>
-        <p className="mt-1 text-gray-500">Add some tools to get started.</p>
+        <h1 className="mt-4 text-xl font-black text-gray-900">{t("cart.empty")}</h1>
+        <p className="mt-1 text-gray-500">{t("cart.emptySub")}</p>
         <Link href="/products" className="brand-gradient mt-6 inline-block rounded-full px-6 py-3 font-bold text-white shadow">
-          Browse Products
+          {t("btn.browse")}
         </Link>
       </div>
     );
@@ -24,8 +26,8 @@ export default function CartPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-3 py-6 sm:px-4">
-      <h1 className="text-2xl font-black text-gray-900">My Cart</h1>
-      <p className="mt-1 text-sm text-gray-500">{items.length} item{items.length !== 1 ? "s" : ""}</p>
+      <h1 className="text-2xl font-black text-gray-900">{t("cart.title")}</h1>
+      <p className="mt-1 text-sm text-gray-500">{items.length} {t("cart.items")}</p>
 
       {/* Items */}
       <div className="mt-5 space-y-3">
@@ -46,7 +48,7 @@ export default function CartPage() {
                 {item.name}
               </Link>
               <span className="mt-0.5 flex items-center gap-1 text-[11px] font-semibold text-green-700">
-                <IconTruck width={12} height={12} /> Free Delivery
+                <IconTruck width={12} height={12} /> {t("badge.freeDelivery")}
               </span>
               <div className="mt-auto flex items-center justify-between pt-2">
                 <span className="font-black text-brand-red">{formatPrice(item.price * item.qty)}</span>
@@ -72,22 +74,22 @@ export default function CartPage() {
       {/* Summary */}
       <div className="mt-5 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
         <div className="flex justify-between text-sm">
-          <span className="text-gray-600">Subtotal</span>
+          <span className="text-gray-600">{t("cart.subtotal")}</span>
           <span className="font-semibold text-gray-900">{formatPrice(subtotal)}</span>
         </div>
         <div className="mt-1.5 flex justify-between text-sm">
-          <span className="text-gray-600">Delivery</span>
-          <span className="font-bold text-green-600">FREE</span>
+          <span className="text-gray-600">{t("cart.delivery")}</span>
+          <span className="font-bold text-green-600">{t("cart.free")}</span>
         </div>
         <div className="mt-3 flex justify-between border-t border-gray-200 pt-3">
-          <span className="font-bold text-gray-900">Total</span>
+          <span className="font-bold text-gray-900">{t("cart.total")}</span>
           <span className="text-xl font-black text-brand-red">{formatPrice(subtotal)}</span>
         </div>
         <Link href="/checkout" className="brand-gradient mt-4 block rounded-full py-3.5 text-center font-bold text-white shadow">
-          Proceed to Checkout
+          {t("cart.checkout")}
         </Link>
         <Link href="/products" className="mt-2 block text-center text-sm font-semibold text-gray-500 hover:text-brand-red">
-          Continue shopping
+          {t("cart.continue")}
         </Link>
       </div>
     </div>

@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { formatPrice } from "@/lib/products";
+import { useLang } from "./LanguageProvider";
 
 function VoucherCard({ coupon }) {
+  const { t } = useLang();
   const [copied, setCopied] = useState(false);
 
   const label =
@@ -36,7 +38,7 @@ function VoucherCard({ coupon }) {
             onClick={collect}
             className={`rounded-full px-2.5 py-1 text-[11px] font-bold text-white ${copied ? "bg-green-600" : "bg-brand-red"}`}
           >
-            {copied ? "Copied" : "Collect"}
+            {copied ? t("voucher.copied") : t("voucher.collect")}
           </button>
         </div>
       </div>
@@ -45,10 +47,11 @@ function VoucherCard({ coupon }) {
 }
 
 export default function VoucherStrip({ coupons }) {
+  const { t } = useLang();
   if (!coupons || coupons.length === 0) return null;
   return (
     <section className="mt-4">
-      <h2 className="mb-2 text-sm font-black text-gray-900">🎟️ Collect Vouchers</h2>
+      <h2 className="mb-2 text-sm font-black text-gray-900">🎟️ {t("home.vouchers")}</h2>
       <div className="flex gap-3 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {coupons.map((c) => (
           <VoucherCard key={c.id} coupon={c} />

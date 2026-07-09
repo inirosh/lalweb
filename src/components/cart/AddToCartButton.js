@@ -3,12 +3,14 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "./CartProvider";
+import { useLang } from "../LanguageProvider";
 import { IconCart, IconPlus } from "../icons";
 
 // `product` needs: slug, name, price, offerPrice, image, inStock.
 // mode: "add" (full button), "buy" (adds then goes to checkout), "icon" (compact).
 export default function AddToCartButton({ product, mode = "add", className = "" }) {
   const { addItem } = useCart();
+  const { t } = useLang();
   const router = useRouter();
   const [added, setAdded] = useState(false);
 
@@ -49,7 +51,7 @@ export default function AddToCartButton({ product, mode = "add", className = "" 
         disabled={outOfStock}
         className={`brand-gradient flex items-center justify-center gap-2 rounded-full px-6 py-3 font-bold text-white shadow disabled:opacity-50 ${className}`}
       >
-        {outOfStock ? "Out of Stock" : "Buy Now"}
+        {outOfStock ? t("badge.outOfStock") : t("btn.buyNow")}
       </button>
     );
   }
@@ -61,7 +63,7 @@ export default function AddToCartButton({ product, mode = "add", className = "" 
       className={`flex items-center justify-center gap-2 rounded-full border-2 border-brand-red px-6 py-3 font-bold text-brand-red transition-colors hover:bg-red-50 disabled:opacity-50 ${className}`}
     >
       <IconCart width={18} height={18} />
-      {outOfStock ? "Out of Stock" : added ? "Added ✓" : "Add to Cart"}
+      {outOfStock ? t("badge.outOfStock") : added ? t("btn.added") : t("btn.addToCart")}
     </button>
   );
 }

@@ -6,12 +6,14 @@ import { usePathname } from "next/navigation";
 import { SHOP, telLink } from "@/lib/shop";
 import { IconSearch, IconPhone, IconMenu, IconClose, IconCart } from "./icons";
 import { useCart } from "./cart/CartProvider";
+import { useLang } from "./LanguageProvider";
+import LanguageToggle from "./LanguageToggle";
 
 const NAV = [
-  { href: "/", label: "Home" },
-  { href: "/products", label: "Products" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
+  { href: "/", key: "nav.home" },
+  { href: "/products", key: "nav.products" },
+  { href: "/about", key: "nav.about" },
+  { href: "/contact", key: "nav.contact" },
 ];
 
 export default function Header() {
@@ -19,6 +21,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const { count } = useCart();
+  const { t } = useLang();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -52,13 +55,14 @@ export default function Header() {
             <input
               type="search"
               name="q"
-              placeholder="Search tools…"
+              placeholder={t("search.placeholderShort")}
               className="w-full min-w-0 flex-1 bg-transparent px-2 py-1.5 text-sm text-gray-900 outline-none"
             />
             <button type="submit" aria-label="Search" className="brand-gradient m-0.5 flex shrink-0 items-center justify-center rounded-full p-2 text-white">
               <IconSearch width={16} height={16} />
             </button>
           </form>
+          <LanguageToggle className="shrink-0" />
           <button
             className="shrink-0 rounded-lg p-1 text-gray-700"
             onClick={() => setOpen((v) => !v)}
@@ -76,7 +80,7 @@ export default function Header() {
                 href={item.href}
                 className="block rounded-lg px-3 py-2.5 text-sm font-semibold text-gray-800 hover:bg-gray-100"
               >
-                {item.label}
+                {t(item.key)}
               </Link>
             ))}
           </div>
@@ -115,13 +119,14 @@ export default function Header() {
                     active ? "bg-gray-900 text-white" : "text-gray-600 hover:bg-gray-100"
                   }`}
                 >
-                  {item.label}
+                  {t(item.key)}
                 </Link>
               );
             })}
           </nav>
 
           <div className="flex items-center gap-1.5">
+            <LanguageToggle />
             <Link
               href="/cart"
               aria-label="Cart"
