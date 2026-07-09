@@ -35,7 +35,9 @@ async function uploadImageIfPresent(formData, supabase) {
 
 function readForm(formData) {
   return {
-    title: String(formData.get("title") || "").trim() || null,
+    // `title` is NOT NULL in the DB — store "" (not null) when left blank,
+    // so banners with the text baked into the image can be saved.
+    title: String(formData.get("title") || "").trim(),
     subtitle: String(formData.get("subtitle") || "").trim() || null,
     cta_label: String(formData.get("cta_label") || "").trim() || null,
     cta_href: String(formData.get("cta_href") || "").trim() || null,
