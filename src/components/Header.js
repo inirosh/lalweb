@@ -45,20 +45,20 @@ export default function Header() {
           <Link href="/" aria-label="Home">
             <Logo />
           </Link>
-          <form action="/products" className="flex flex-1 items-center rounded-full border border-gray-200 bg-gray-50 pl-3">
-            <IconSearch width={18} height={18} className="text-gray-400" />
+          <form action="/products" className="flex min-w-0 flex-1 items-center rounded-full border border-gray-200 bg-gray-50 pl-2.5">
+            <IconSearch width={16} height={16} className="shrink-0 text-gray-400" />
             <input
               type="search"
               name="q"
-              placeholder="Search tools & appliances"
-              className="min-w-0 flex-1 bg-transparent px-2 py-2 text-sm text-gray-900 outline-none"
+              placeholder="Search tools…"
+              className="w-full min-w-0 flex-1 bg-transparent px-2 py-1.5 text-sm text-gray-900 outline-none"
             />
-            <button type="submit" className="brand-gradient m-0.5 rounded-full px-3 py-1.5 text-xs font-bold text-white">
-              Search
+            <button type="submit" aria-label="Search" className="brand-gradient m-0.5 flex shrink-0 items-center justify-center rounded-full p-2 text-white">
+              <IconSearch width={16} height={16} />
             </button>
           </form>
           <button
-            className="rounded-lg p-1.5 text-gray-700"
+            className="shrink-0 rounded-lg p-1 text-gray-700"
             onClick={() => setOpen((v) => !v)}
             aria-label="Menu"
           >

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import ProductImage from "./ProductImage";
 import { formatPrice } from "@/lib/products";
-import { IconStar } from "./icons";
+import { IconTruck, IconShield } from "./icons";
 
 export default function ProductCard({ product }) {
   const hasOffer =
@@ -52,14 +52,20 @@ export default function ProductCard({ product }) {
           )}
         </div>
 
-        {/* Meta row (brand + trust) */}
-        <div className="mt-1.5 flex items-center justify-between text-[11px] text-gray-400">
-          <span className="truncate">{product.brand || "Genuine"}</span>
-          <span className="flex items-center gap-0.5 text-brand-yellow">
-            <IconStar width={11} height={11} />
-            <span className="text-gray-500">Trusted</span>
+        {/* Free delivery tag */}
+        <div className="mt-1.5">
+          <span className="inline-flex items-center gap-1 rounded bg-green-50 px-1.5 py-0.5 text-[10px] font-bold text-green-700">
+            <IconTruck width={11} height={11} /> Free Delivery
           </span>
         </div>
+
+        {/* Warranty */}
+        {product.warranty && product.warranty !== "No Warranty" && (
+          <div className="mt-1 flex items-center gap-1 text-[10px] text-gray-500">
+            <IconShield width={11} height={11} className="text-brand-red" />
+            {product.warranty}
+          </div>
+        )}
       </div>
     </Link>
   );

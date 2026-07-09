@@ -85,7 +85,7 @@ export default function AdminShell({ children, email }) {
       )}
 
       {/* Main area */}
-      <div className="flex flex-1 flex-col">
+      <div className="flex min-w-0 flex-1 flex-col">
         {/* Top bar */}
         <header className="flex items-center justify-between border-b bg-white px-4 py-3 md:px-6">
           <button
