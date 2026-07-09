@@ -94,6 +94,12 @@ export default function ProductForm({ action, product, submitLabel }) {
         </div>
 
         <div>
+          <label className={labelCls}>Offer ends — optional</label>
+          <input name="offer_ends" type="datetime-local" defaultValue={p.offerEnds ? p.offerEnds.slice(0, 16) : ""} className={field} />
+          <p className="mt-1 text-xs text-gray-400">Set a date/time to show a countdown timer in the Flash Sale.</p>
+        </div>
+
+        <div>
           <label className={labelCls}>Stock quantity *</label>
           <input name="stock_qty" type="number" min="0" step="1" defaultValue={p.stockQty ?? 0} required className={field} placeholder="10" />
         </div>

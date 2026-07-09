@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useCart } from "@/components/cart/CartProvider";
 import { formatPrice } from "@/lib/products";
+import { getActiveCoupons, validateCoupon } from "@/lib/coupons";
 import { SHOP, whatsappLink } from "@/lib/shop";
 import { IconWhatsApp, IconTruck } from "@/components/icons";
 
@@ -12,6 +13,34 @@ export default function CheckoutPage() {
   const [form, setForm] = useState({ name: "", phone: "", address: "", note: "" });
   const [errors, setErrors] = useState({});
   const [placed, setPlaced] = useState(false);
+
+  // Coupons
+  const [coupons, setCoupons] = useState([]);
+  const [couponInput, setCouponInput] = useState("");
+  const [applied, setApplied] = useState(null); // { code, discount }
+  const [couponMsg, setCouponMsg] = useState("");
+
+  useEffect(() => {
+    getActiveCoupons().then(setCoupons).catch(() => {});
+  }, []);
+
+  const discount = applied ? applied.discount : 0;
+  const total = Math.max(0, subtotal - discount);
+
+  function applyCoupon() {
+    const code = couponInput.trim().toUpperCase();
+    setCouponMsg("");
+    if (!code) return;
+    const coupon = coupons.find((c) => c.code.toUpperCase() === code);
+    const res = validateCoupon(coupon, { subtotal, slugs: items.map((i) => i.slug) });
+    if (res.ok) {
+      setApplied({ code: coupon.code, discount: res.discount });
+      setCouponMsg(`Coupon applied — you saved ${formatPrice(res.discount)}!`);
+    } else {
+      setApplied(null);
+      setCouponMsg(res.reason);
+    }
+  }
 
   function update(field, value) {
     setForm((f) => ({ ...f, [field]: value }));
@@ -45,8 +74,9 @@ export default function CheckoutPage() {
       (form.note.trim() ? `*Note:* ${form.note}\n` : "") +
       `\n*Items:*\n${lines.join("\n")}\n` +
       `\nSubtotal: ${formatPrice(subtotal)}\n` +
+      (applied ? `Coupon (${applied.code}): -${formatPrice(discount)}\n` : "") +
       `Delivery: FREE\n` +
-      `*TOTAL (Cash on Delivery): ${formatPrice(subtotal)}*`;
+      `*TOTAL (Cash on Delivery): ${formatPrice(total)}*`;
 
     // Open WhatsApp to the shop with the pre-filled order
     window.open(whatsappLink(message), "_blank");
@@ -132,10 +162,32 @@ export default function CheckoutPage() {
             </li>
           ))}
         </ul>
+        {/* Coupon */}
+        <div className="mt-4 border-t border-gray-200 pt-3">
+          <label className="mb-1 block text-sm font-semibold text-gray-700">Have a coupon?</label>
+          <div className="flex gap-2">
+            <input
+              value={couponInput}
+              onChange={(e) => setCouponInput(e.target.value)}
+              placeholder="Enter code (e.g. TOOLS10)"
+              className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm uppercase text-gray-900 outline-none focus:border-brand-orange"
+            />
+            <button onClick={applyCoupon} type="button" className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-bold text-white hover:bg-black">
+              Apply
+            </button>
+          </div>
+          {couponMsg && (
+            <p className={`mt-1 text-xs font-semibold ${applied ? "text-green-600" : "text-red-600"}`}>{couponMsg}</p>
+          )}
+        </div>
+
         <div className="mt-3 space-y-1.5 border-t border-gray-200 pt-3 text-sm">
           <div className="flex justify-between"><span className="text-gray-600">Subtotal</span><span className="font-semibold">{formatPrice(subtotal)}</span></div>
+          {discount > 0 && (
+            <div className="flex justify-between"><span className="text-gray-600">Coupon ({applied.code})</span><span className="font-semibold text-green-600">- {formatPrice(discount)}</span></div>
+          )}
           <div className="flex justify-between"><span className="text-gray-600">Delivery</span><span className="font-bold text-green-600">FREE</span></div>
-          <div className="flex justify-between border-t border-gray-200 pt-2 text-base"><span className="font-bold text-gray-900">Total (COD)</span><span className="font-black text-brand-red">{formatPrice(subtotal)}</span></div>
+          <div className="flex justify-between border-t border-gray-200 pt-2 text-base"><span className="font-bold text-gray-900">Total (COD)</span><span className="font-black text-brand-red">{formatPrice(total)}</span></div>
         </div>
       </div>
 

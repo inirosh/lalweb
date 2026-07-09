@@ -73,6 +73,7 @@ function readForm(formData) {
     price,
     // Only keep a sale price if it's a valid number below the normal price
     offer_price: offerNum != null && offerNum > 0 && offerNum < price ? offerNum : null,
+    offer_ends: String(formData.get("offer_ends") || "").trim() || null,
     stock_qty: parseInt(formData.get("stock_qty") || "0", 10),
     low_stock_threshold: parseInt(formData.get("low_stock_threshold") || "3", 10),
     featured: formData.get("featured") === "on",

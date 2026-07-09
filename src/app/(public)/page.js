@@ -1,10 +1,13 @@
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
+import VoucherStrip from "@/components/VoucherStrip";
+import Countdown from "@/components/Countdown";
 import { getAllProducts, CATEGORIES } from "@/lib/products";
+import { getActiveCoupons } from "@/lib/coupons";
 import { SHOP } from "@/lib/shop";
 import {
   IconWrench, IconDroplet, IconWind, IconBolt, IconHome, IconBag,
-  IconSearch, IconChevronRight, IconShield, IconTruck, IconStar,
+  IconChevronRight, IconShield, IconTruck, IconStar,
 } from "@/components/icons";
 
 export const dynamic = "force-dynamic";
@@ -20,7 +23,10 @@ const CAT_ICONS = {
 };
 
 export default async function HomePage() {
-  const products = await getAllProducts();
+  const [products, coupons] = await Promise.all([
+    getAllProducts(),
+    getActiveCoupons(),
+  ]);
   const deals = products.filter(
     (p) => p.offerPrice != null && p.offerPrice < p.price
   );
@@ -71,6 +77,39 @@ export default async function HomePage() {
         ))}
       </section>
 
+      {/* ============ VOUCHERS ============ */}
+      <VoucherStrip coupons={coupons} />
+
+      {/* ============ FLASH SALE / SPECIAL OFFERS ============ */}
+      {deals.length > 0 && (
+        <section className="mt-5 rounded-2xl border border-red-100 bg-gradient-to-br from-red-50 to-orange-50 p-3 shadow-sm sm:p-4">
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="flex items-center gap-1.5 text-base font-black text-brand-red">
+              <IconBolt width={18} height={18} />
+              Flash Sale
+            </h2>
+            <Link href="/products" className="flex items-center text-xs font-bold text-brand-red">
+              See all <IconChevronRight width={14} height={14} />
+            </Link>
+          </div>
+          <div className="flex gap-3 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {deals.map((product) => (
+              <div key={product.slug} className="w-36 shrink-0 sm:w-44">
+                <ProductCard product={product} />
+                {product.offerEnds && (
+                  <div className="mt-1.5 text-center">
+                    <span className="text-[10px] font-bold uppercase text-gray-500">Ends in</span>
+                    <div className="mt-0.5 flex justify-center">
+                      <Countdown endsAt={product.offerEnds} />
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* ============ CATEGORIES ============ */}
       <section className="mt-5 rounded-2xl border border-gray-100 bg-white p-3 shadow-sm sm:p-4">
         <h2 className="mb-3 text-sm font-black text-gray-900 sm:text-base">Categories</h2>
@@ -94,28 +133,6 @@ export default async function HomePage() {
           })}
         </div>
       </section>
-
-      {/* ============ HOT DEALS (horizontal scroll) ============ */}
-      {deals.length > 0 && (
-        <section className="mt-5">
-          <div className="mb-2.5 flex items-center justify-between">
-            <h2 className="flex items-center gap-1.5 text-base font-black text-gray-900">
-              <IconBolt width={18} height={18} className="text-brand-red" />
-              Hot Deals
-            </h2>
-            <Link href="/products" className="flex items-center text-xs font-bold text-brand-red">
-              See all <IconChevronRight width={14} height={14} />
-            </Link>
-          </div>
-          <div className="flex gap-3 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {deals.map((product) => (
-              <div key={product.slug} className="w-36 shrink-0 sm:w-44">
-                <ProductCard product={product} />
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
 
       {/* ============ PRODUCT FEED ============ */}
       <section className="mt-5">

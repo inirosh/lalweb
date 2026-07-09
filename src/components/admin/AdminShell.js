@@ -8,6 +8,7 @@ import { createSupabaseBrowser } from "@/lib/supabase/browser";
 const NAV = [
   { href: "/admin", label: "Dashboard", icon: "📊" },
   { href: "/admin/products", label: "Products & Stock", icon: "📦" },
+  { href: "/admin/coupons", label: "Coupons & Offers", icon: "🎟️" },
   { href: "/admin/customers", label: "Customers", icon: "👥" },
   { href: "/admin/invoices", label: "Invoices", icon: "🧾" },
 ];
