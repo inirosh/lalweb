@@ -7,11 +7,8 @@ import StockBadge from "@/components/StockBadge";
 import InquiryButtons from "@/components/InquiryButtons";
 import AddToCartButton from "@/components/cart/AddToCartButton";
 import { IconTruck, IconShield } from "@/components/icons";
-import {
-  getProductBySlug,
-  getCategoryName,
-  formatPrice,
-} from "@/lib/products";
+import { getProductBySlug, formatPrice } from "@/lib/products";
+import { getAllCategories, categoryName } from "@/lib/categories";
 import { getLang } from "@/lib/getLang";
 import { t } from "@/lib/i18n";
 
@@ -50,7 +47,7 @@ export async function generateMetadata({ params }) {
 
 export default async function ProductDetailPage({ params }) {
   const { slug } = await params;
-  const [product, lang] = await Promise.all([getProductBySlug(slug), getLang()]);
+  const [product, categories, lang] = await Promise.all([getProductBySlug(slug), getAllCategories(), getLang()]);
   if (!product) notFound();
   const tr = (k) => t(lang, k);
 
@@ -92,7 +89,7 @@ export default async function ProductDetailPage({ params }) {
         {/* Details */}
         <div className="flex flex-col">
           <span className="inline-block w-fit rounded bg-brand-yellow px-2 py-0.5 text-[11px] font-bold uppercase text-brand-dark">
-            {getCategoryName(product.category)}
+            {categoryName(categories, product.category)}
           </span>
           <h1 className="mt-3 text-2xl font-black text-gray-900 sm:text-3xl">
             {product.name}

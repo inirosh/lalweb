@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { getAllProducts, getCategoryName, formatPrice } from "@/lib/products";
+import { getAllProducts, formatPrice } from "@/lib/products";
+import { getAllCategories, categoryName } from "@/lib/categories";
 import { getAllCosts } from "@/lib/costs";
 import { deleteProduct } from "./actions";
 import DeleteProductButton from "@/components/admin/DeleteProductButton";
@@ -8,7 +9,7 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminProductsPage({ searchParams }) {
   const params = await searchParams;
-  const [products, costs] = await Promise.all([getAllProducts(), getAllCosts()]);
+  const [products, costs, categories] = await Promise.all([getAllProducts(), getAllCosts(), getAllCategories()]);
 
   const lowStock = products.filter(
     (p) => p.stockQty > 0 && p.stockQty <= (p.lowStockThreshold ?? 3)
@@ -92,7 +93,7 @@ export default async function AdminProductsPage({ searchParams }) {
                     )}
                   </td>
                   <td className="px-4 py-3 text-gray-600">
-                    {getCategoryName(p.category)}
+                    {categoryName(categories, p.category)}
                   </td>
                   <td className="px-4 py-3 font-semibold text-gray-900">
                     {formatPrice(p.price)}

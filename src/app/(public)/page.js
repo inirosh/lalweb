@@ -5,7 +5,8 @@ import Countdown from "@/components/Countdown";
 import HeroBanner from "@/components/HeroBanner";
 import JsonLd from "@/components/JsonLd";
 import { SHOP } from "@/lib/shop";
-import { getAllProducts, CATEGORIES } from "@/lib/products";
+import { getAllProducts } from "@/lib/products";
+import { getAllCategories } from "@/lib/categories";
 import { getActiveCoupons } from "@/lib/coupons";
 import { getActiveBanners } from "@/lib/banners";
 import { getLang } from "@/lib/getLang";
@@ -28,10 +29,11 @@ const CAT_ICONS = {
 };
 
 export default async function HomePage() {
-  const [products, coupons, banners, lang] = await Promise.all([
+  const [products, coupons, banners, categories, lang] = await Promise.all([
     getAllProducts(),
     getActiveCoupons(),
     getActiveBanners(),
+    getAllCategories(),
     getLang(),
   ]);
   const tr = (k) => t(lang, k);
@@ -123,7 +125,7 @@ export default async function HomePage() {
       <section className="mt-5 rounded-2xl border border-gray-100 bg-white p-3 shadow-sm sm:p-4">
         <h2 className="mb-3 text-sm font-black text-gray-900 sm:text-base">{tr("home.categories")}</h2>
         <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 sm:gap-3">
-          {CATEGORIES.map((cat) => {
+          {categories.map((cat) => {
             const Icon = CAT_ICONS[cat.slug] || IconBag;
             return (
               <Link

@@ -1,8 +1,12 @@
 import Link from "next/link";
 import ProductForm from "@/components/admin/ProductForm";
+import { getAllCategories } from "@/lib/categories";
 import { createProduct } from "../actions";
 
-export default function NewProductPage() {
+export const dynamic = "force-dynamic";
+
+export default async function NewProductPage() {
+  const categories = await getAllCategories();
   return (
     <div className="max-w-3xl">
       <Link href="/admin/products" className="text-sm font-semibold text-gray-500 hover:text-brand-red">
@@ -13,7 +17,7 @@ export default function NewProductPage() {
         Fill in the details. Fields marked * are required.
       </p>
 
-      <ProductForm action={createProduct} product={null} submitLabel="Add Product" />
+      <ProductForm action={createProduct} product={null} categories={categories} submitLabel="Add Product" />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import CatalogClient from "@/components/CatalogClient";
-import { getAllProducts, CATEGORIES } from "@/lib/products";
+import { getAllProducts } from "@/lib/products";
+import { getAllCategories } from "@/lib/categories";
 import { getLang } from "@/lib/getLang";
 import { t } from "@/lib/i18n";
 
@@ -13,7 +14,7 @@ export const metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function ProductsPage() {
-  const [products, lang] = await Promise.all([getAllProducts(), getLang()]);
+  const [products, categories, lang] = await Promise.all([getAllProducts(), getAllCategories(), getLang()]);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
@@ -22,7 +23,7 @@ export default async function ProductsPage() {
 
       {/* Suspense is required because the filter reads the URL (?category=) */}
       <Suspense fallback={<p className="mt-8 text-gray-500">Loading…</p>}>
-        <CatalogClient products={products} categories={CATEGORIES} />
+        <CatalogClient products={products} categories={categories} />
       </Suspense>
     </div>
   );

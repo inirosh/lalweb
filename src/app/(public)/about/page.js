@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { SHOP, telLink } from "@/lib/shop";
-import { CATEGORIES } from "@/lib/products";
+import { getAllCategories } from "@/lib/categories";
 import { getLang } from "@/lib/getLang";
 import { t } from "@/lib/i18n";
 
@@ -11,7 +11,7 @@ export const metadata = {
 };
 
 export default async function AboutPage() {
-  const lang = await getLang();
+  const [lang, categories] = await Promise.all([getLang(), getAllCategories()]);
   const tr = (k) => t(lang, k);
   return (
     <div>
@@ -44,7 +44,7 @@ export default async function AboutPage() {
         {/* What we sell */}
         <h3 className="mt-10 text-lg font-black text-gray-900">{tr("about.whatWeSell")}</h3>
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {CATEGORIES.map((cat) => (
+          {categories.map((cat) => (
             <div
               key={cat.slug}
               className="rounded-lg border border-gray-200 bg-white p-3 text-center text-sm font-semibold text-gray-800 shadow-sm"

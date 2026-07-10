@@ -3,7 +3,6 @@
 import { useActionState, useState } from "react";
 import Link from "next/link";
 import { useFormStatus } from "react-dom";
-import { CATEGORIES } from "@/lib/products";
 import { compressImage } from "@/lib/compressImage";
 
 function SubmitButton({ label }) {
@@ -21,7 +20,7 @@ function SubmitButton({ label }) {
 
 // `action` is a server action with signature (prevState, formData).
 // `product` is the existing product when editing (null when adding).
-export default function ProductForm({ action, product, submitLabel, cost }) {
+export default function ProductForm({ action, product, submitLabel, cost, categories = [] }) {
   const [state, formAction] = useActionState(action, null);
   const [photoNote, setPhotoNote] = useState("");
   const p = product || {};
@@ -96,7 +95,7 @@ export default function ProductForm({ action, product, submitLabel, cost }) {
           <label className={labelCls}>Category *</label>
           <select name="category" defaultValue={p.category || ""} required className={field}>
             <option value="" disabled>Choose a category…</option>
-            {CATEGORIES.map((c) => (
+            {categories.map((c) => (
               <option key={c.slug} value={c.slug}>{c.name}</option>
             ))}
           </select>
