@@ -24,8 +24,8 @@ export default async function AdminBannersPage({ searchParams }) {
         </Link>
       </div>
 
-      {params?.saved && <p className="mt-4 rounded-lg bg-green-50 px-4 py-3 text-sm font-semibold text-green-700">✅ Banner saved.</p>}
-      {params?.deleted && <p className="mt-4 rounded-lg bg-green-50 px-4 py-3 text-sm font-semibold text-green-700">✅ Banner deleted.</p>}
+      {params?.saved && <p className="mt-4 rounded-lg bg-green-50 px-4 py-3 text-sm font-semibold text-green-700">Banner saved.</p>}
+      {params?.deleted && <p className="mt-4 rounded-lg bg-green-50 px-4 py-3 text-sm font-semibold text-green-700">Banner deleted.</p>}
 
       {banners.length === 0 ? (
         <div className="mt-8 rounded-xl border border-dashed border-gray-300 bg-white p-10 text-center text-gray-500">

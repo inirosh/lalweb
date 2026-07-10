@@ -50,7 +50,7 @@ export default async function OrderDetailPage({ params }) {
         <p className="text-sm text-gray-600">{order.customerAddress}</p>
         {order.note && <p className="mt-1 text-sm text-gray-500">Note: {order.note}</p>}
         <a href={waLink} target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-2 rounded-full bg-green-600 px-4 py-2 text-sm font-bold text-white hover:bg-green-700">
-          💬 Message customer on WhatsApp
+          Message customer on WhatsApp
         </a>
       </div>
 

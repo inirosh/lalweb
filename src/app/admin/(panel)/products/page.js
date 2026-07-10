@@ -36,19 +36,19 @@ export default async function AdminProductsPage({ searchParams }) {
       {/* Success messages */}
       {params?.saved && (
         <p className="mt-4 rounded-lg bg-green-50 px-4 py-3 text-sm font-semibold text-green-700">
-          ✅ Product saved successfully.
+          Product saved successfully.
         </p>
       )}
       {params?.deleted && (
         <p className="mt-4 rounded-lg bg-green-50 px-4 py-3 text-sm font-semibold text-green-700">
-          ✅ Product deleted.
+          Product deleted.
         </p>
       )}
 
       {/* Stock alerts */}
       {(lowStock.length > 0 || outOfStock.length > 0) && (
         <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm">
-          <span className="font-bold text-amber-800">⚠️ Stock alerts: </span>
+          <span className="font-bold text-amber-800">Stock alerts: </span>
           {outOfStock.length > 0 && (
             <span className="text-amber-800">
               {outOfStock.length} out of stock
@@ -69,7 +69,7 @@ export default async function AdminProductsPage({ searchParams }) {
               <th className="px-4 py-3">Product</th>
               <th className="px-4 py-3">Category</th>
               <th className="px-4 py-3">Price</th>
-              <th className="px-4 py-3">Cost 🔒</th>
+              <th className="px-4 py-3">Cost </th>
               <th className="px-4 py-3">Profit</th>
               <th className="px-4 py-3">Stock</th>
               <th className="px-4 py-3 text-right">Actions</th>

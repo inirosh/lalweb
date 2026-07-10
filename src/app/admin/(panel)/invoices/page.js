@@ -24,7 +24,7 @@ export default async function AdminInvoicesPage({ searchParams }) {
 
       {params?.deleted && (
         <p className="mt-4 rounded-lg bg-green-50 px-4 py-3 text-sm font-semibold text-green-700">
-          ✅ Invoice deleted.
+          Invoice deleted.
         </p>
       )}
 

@@ -3,6 +3,7 @@ import { SHOP, telLink } from "@/lib/shop";
 import { getAllCategories } from "@/lib/categories";
 import { getLang } from "@/lib/getLang";
 import { t } from "@/lib/i18n";
+import { IconStar, IconBolt, IconShield, IconPhone } from "@/components/icons";
 
 export const metadata = {
   title: "About Us | Lal Distributors — Wadduwa",
@@ -58,13 +59,15 @@ export default async function AboutPage() {
         <h3 className="mt-10 text-lg font-black text-gray-900">{tr("about.whyUs")}</h3>
         <ul className="mt-4 space-y-3">
           {[
-            ["🏆", "Trusted local business in Wadduwa"],
-            ["💰", "Value-for-money pricing"],
-            ["🛡️", "Warranty on eligible products"],
-            ["📞", "Friendly advice — just call or WhatsApp us"],
-          ].map(([icon, text]) => (
+            [IconStar, "Trusted local business in Wadduwa"],
+            [IconBolt, "Value-for-money pricing"],
+            [IconShield, "Warranty on eligible products"],
+            [IconPhone, "Friendly advice — just call or WhatsApp us"],
+          ].map(([Icon, text]) => (
             <li key={text} className="flex items-center gap-3 text-gray-700">
-              <span className="text-xl">{icon}</span>
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-50 text-brand-red">
+                <Icon width={16} height={16} />
+              </span>
               <span>{text}</span>
             </li>
           ))}
@@ -76,8 +79,8 @@ export default async function AboutPage() {
             {tr("about.contactCta")}
           </p>
           <div className="flex gap-3">
-            <a href={telLink} className="rounded-full bg-white px-6 py-3 font-bold text-brand-red shadow hover:bg-gray-100">
-              📞 Call Us
+            <a href={telLink} className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 font-bold text-brand-red shadow hover:bg-gray-100">
+              <IconPhone width={18} height={18} /> Call Us
             </a>
             <Link href="/contact" className="rounded-full bg-brand-dark px-6 py-3 font-bold text-white shadow hover:bg-black">
               Contact

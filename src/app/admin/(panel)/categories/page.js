@@ -23,8 +23,8 @@ export default async function AdminCategoriesPage({ searchParams }) {
         </Link>
       </div>
 
-      {params?.saved && <p className="mt-4 rounded-lg bg-green-50 px-4 py-3 text-sm font-semibold text-green-700">✅ Category saved.</p>}
-      {params?.deleted && <p className="mt-4 rounded-lg bg-green-50 px-4 py-3 text-sm font-semibold text-green-700">✅ Category deleted.</p>}
+      {params?.saved && <p className="mt-4 rounded-lg bg-green-50 px-4 py-3 text-sm font-semibold text-green-700">Category saved.</p>}
+      {params?.deleted && <p className="mt-4 rounded-lg bg-green-50 px-4 py-3 text-sm font-semibold text-green-700">Category deleted.</p>}
 
       <div className="mt-6 overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
         <table className="w-full text-left text-sm">

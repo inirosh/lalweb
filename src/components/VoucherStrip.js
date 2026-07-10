@@ -51,7 +51,7 @@ export default function VoucherStrip({ coupons }) {
   if (!coupons || coupons.length === 0) return null;
   return (
     <section className="mt-4">
-      <h2 className="mb-2 text-sm font-black text-gray-900">🎟️ {t("home.vouchers")}</h2>
+      <h2 className="mb-2 text-sm font-black text-gray-900">{t("home.vouchers")}</h2>
       <div className="flex gap-3 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {coupons.map((c) => (
           <VoucherCard key={c.id} coupon={c} />

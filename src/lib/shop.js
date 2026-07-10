@@ -14,6 +14,8 @@ export const SHOP = {
   instagramUrl: "https://instagram.com/lal_distributors_official",
   hours: "Always open (24/7 online)",
   tagline: "Power Tools • Home Appliances • Value for Money",
+  // Developer credit link in the footer (Brandcare). Put your page/WhatsApp here.
+  developerUrl: "",
 };
 
 // Helper links used by the "Call" and "WhatsApp" buttons

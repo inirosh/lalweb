@@ -25,7 +25,7 @@ export default async function AdminDashboardPage() {
       {/* New orders alert */}
       {s.newOrdersCount > 0 && (
         <Link href="/admin/orders" className="mt-6 flex items-center justify-between rounded-2xl border border-blue-200 bg-blue-50 px-5 py-4 shadow-sm hover:bg-blue-100">
-          <span className="font-bold text-blue-800">🛒 {s.newOrdersCount} new order{s.newOrdersCount !== 1 ? "s" : ""} to review</span>
+          <span className="font-bold text-blue-800">{s.newOrdersCount} new order{s.newOrdersCount !== 1 ? "s" : ""} to review</span>
           <span className="text-sm font-bold text-blue-700">View →</span>
         </Link>
       )}
@@ -41,7 +41,7 @@ export default async function AdminDashboardPage() {
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
         {/* Best sellers */}
         <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-          <h2 className="font-black text-gray-900">🏆 Best-Selling Items</h2>
+          <h2 className="font-black text-gray-900">Best-Selling Items</h2>
           {s.bestSellers.length === 0 ? (
             <p className="mt-3 text-sm text-gray-400">No sales recorded yet.</p>
           ) : (
@@ -61,9 +61,9 @@ export default async function AdminDashboardPage() {
 
         {/* Low stock */}
         <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-          <h2 className="font-black text-gray-900">⚠️ Low-Stock Alerts</h2>
+          <h2 className="font-black text-gray-900">Low-Stock Alerts</h2>
           {s.lowStock.length === 0 ? (
-            <p className="mt-3 text-sm text-green-600">All products are well stocked. 👍</p>
+            <p className="mt-3 text-sm text-green-600">All products are well stocked. </p>
           ) : (
             <ul className="mt-3 space-y-2">
               {s.lowStock.map((p) => (
@@ -84,7 +84,7 @@ export default async function AdminDashboardPage() {
       {/* Recent sales */}
       <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
         <div className="flex items-center justify-between">
-          <h2 className="font-black text-gray-900">🧾 Recent Sales</h2>
+          <h2 className="font-black text-gray-900">Recent Sales</h2>
           <Link href="/admin/invoices" className="text-sm font-bold text-brand-red hover:underline">
             View all →
           </Link>

@@ -1,6 +1,7 @@
 import { SHOP, telLink, whatsappLink } from "@/lib/shop";
 import { getLang } from "@/lib/getLang";
 import { t } from "@/lib/i18n";
+import { IconPhone, IconMail, IconInstagram, IconPin, IconClock, IconWhatsApp } from "@/components/icons";
 
 export const metadata = {
   title: "Contact | Lal Distributors — Wadduwa",
@@ -12,11 +13,11 @@ export default async function ContactPage() {
   const lang = await getLang();
   const tr = (k) => t(lang, k);
   const contactItems = [
-    { icon: "📞", label: tr("contact.phone"), value: SHOP.phoneDisplay, href: telLink },
-    { icon: "✉️", label: tr("contact.email"), value: SHOP.email, href: `mailto:${SHOP.email}` },
-    { icon: "📷", label: "Instagram", value: `@${SHOP.instagram}`, href: SHOP.instagramUrl },
-    { icon: "📍", label: tr("contact.location"), value: SHOP.location, href: null },
-    { icon: "🕒", label: tr("contact.hours"), value: SHOP.hours, href: null },
+    { Icon: IconPhone, label: tr("contact.phone"), value: SHOP.phoneDisplay, href: telLink },
+    { Icon: IconMail, label: tr("contact.email"), value: SHOP.email, href: `mailto:${SHOP.email}` },
+    { Icon: IconInstagram, label: "Instagram", value: `@${SHOP.instagram}`, href: SHOP.instagramUrl },
+    { Icon: IconPin, label: tr("contact.location"), value: SHOP.location, href: null },
+    { Icon: IconClock, label: tr("contact.hours"), value: SHOP.hours, href: null },
   ];
 
   return (
@@ -39,7 +40,9 @@ export default async function ContactPage() {
             <ul className="mt-6 space-y-4">
               {contactItems.map((item) => (
                 <li key={item.label} className="flex items-start gap-3">
-                  <span className="text-2xl">{item.icon}</span>
+                  <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-red-50 text-brand-red">
+                    <item.Icon width={18} height={18} />
+                  </span>
                   <div>
                     <p className="text-xs font-bold uppercase tracking-wide text-gray-400">
                       {item.label}
@@ -65,17 +68,17 @@ export default async function ContactPage() {
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <a
                 href={telLink}
-                className="brand-gradient flex-1 rounded-full px-6 py-3 text-center font-bold text-white shadow hover:scale-105"
+                className="brand-gradient flex flex-1 items-center justify-center gap-2 rounded-full px-6 py-3 text-center font-bold text-white shadow hover:scale-105"
               >
-                📞 Call Now
+                <IconPhone width={18} height={18} /> Call Now
               </a>
               <a
                 href={whatsappLink()}
                 target="_blank"
                 rel="noreferrer"
-                className="flex-1 rounded-full bg-green-600 px-6 py-3 text-center font-bold text-white shadow hover:scale-105"
+                className="flex flex-1 items-center justify-center gap-2 rounded-full bg-green-600 px-6 py-3 text-center font-bold text-white shadow hover:scale-105"
               >
-                💬 WhatsApp
+                <IconWhatsApp width={18} height={18} /> WhatsApp
               </a>
             </div>
           </div>

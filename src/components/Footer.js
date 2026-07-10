@@ -62,8 +62,29 @@ export default async function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-white/10 py-4 text-center text-xs text-gray-500">
-        © {new Date().getFullYear()} {SHOP.name}. {tr("footer.rights")}
+      <div className="border-t border-white/10 py-6 text-center">
+        <p className="text-xs text-gray-500">
+          © {new Date().getFullYear()} {SHOP.name}. {tr("footer.rights")}
+        </p>
+
+        {/* Developer credit */}
+        <a
+          href={SHOP.developerUrl || "#"}
+          target="_blank"
+          rel="noreferrer"
+          className="group mt-3 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 transition-colors hover:border-brand-yellow/40 hover:bg-white/10"
+        >
+          <span className="text-[11px] font-medium uppercase tracking-wider text-gray-400">
+            Designed &amp; Developed by
+          </span>
+          <span className="shine relative bg-gradient-to-r from-brand-yellow via-brand-orange to-brand-red bg-clip-text text-sm font-black tracking-tight text-transparent">
+            Brandcare
+          </span>
+          <span className="text-brand-yellow transition-transform group-hover:translate-x-0.5">→</span>
+        </a>
+        <p className="mt-1.5 text-[10px] tracking-wide text-gray-600">
+          Websites • Branding • Digital Marketing
+        </p>
       </div>
     </footer>
   );

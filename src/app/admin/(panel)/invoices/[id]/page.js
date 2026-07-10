@@ -21,7 +21,7 @@ export default async function InvoiceDetailPage({ params, searchParams }) {
 
       {sp?.created && (
         <p className="mt-3 rounded-lg bg-green-50 px-4 py-3 text-sm font-semibold text-green-700">
-          ✅ Invoice created! Download the PDF below or print it for your customer.
+          Invoice created! Download the PDF below or print it for your customer.
         </p>
       )}
 

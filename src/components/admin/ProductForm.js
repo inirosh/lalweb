@@ -118,7 +118,7 @@ export default function ProductForm({ action, product, submitLabel, cost, catego
         </div>
 
         <div>
-          <label className={labelCls}>Cost price (Rs) — private 🔒</label>
+          <label className={labelCls}>Cost price (Rs) — private </label>
           <input name="cost_price" type="number" min="0" step="0.01" defaultValue={cost ?? ""} onChange={(e) => setCostV(e.target.value)} className={field} placeholder="What you paid" />
           <p className="mt-1 text-xs text-gray-400">Only you can see this — never shown to customers.</p>
         </div>

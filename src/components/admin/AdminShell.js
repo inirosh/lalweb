@@ -4,16 +4,17 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { createSupabaseBrowser } from "@/lib/supabase/browser";
+import { IconChart, IconCart, IconBox, IconFolder, IconTag, IconImage, IconUsers, IconReceipt } from "@/components/icons";
 
 const NAV = [
-  { href: "/admin", label: "Dashboard", icon: "📊" },
-  { href: "/admin/orders", label: "Orders", icon: "🛒" },
-  { href: "/admin/products", label: "Products & Stock", icon: "📦" },
-  { href: "/admin/categories", label: "Categories", icon: "🗂️" },
-  { href: "/admin/coupons", label: "Coupons & Offers", icon: "🎟️" },
-  { href: "/admin/banners", label: "Hero Banners", icon: "🖼️" },
-  { href: "/admin/customers", label: "Customers", icon: "👥" },
-  { href: "/admin/invoices", label: "Invoices", icon: "🧾" },
+  { href: "/admin", label: "Dashboard", Icon: IconChart },
+  { href: "/admin/orders", label: "Orders", Icon: IconCart },
+  { href: "/admin/products", label: "Products & Stock", Icon: IconBox },
+  { href: "/admin/categories", label: "Categories", Icon: IconFolder },
+  { href: "/admin/coupons", label: "Coupons & Offers", Icon: IconTag },
+  { href: "/admin/banners", label: "Hero Banners", Icon: IconImage },
+  { href: "/admin/customers", label: "Customers", Icon: IconUsers },
+  { href: "/admin/invoices", label: "Invoices", Icon: IconReceipt },
 ];
 
 export default function AdminShell({ children, email }) {
@@ -62,7 +63,7 @@ export default function AdminShell({ children, email }) {
                     : "text-gray-300 hover:bg-white/10"
                 }`}
               >
-                <span>{item.icon}</span>
+                <item.Icon width={18} height={18} />
                 {item.label}
               </Link>
             );

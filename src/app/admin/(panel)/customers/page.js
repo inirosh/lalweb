@@ -25,12 +25,12 @@ export default async function AdminCustomersPage({ searchParams }) {
 
       {params?.saved && (
         <p className="mt-4 rounded-lg bg-green-50 px-4 py-3 text-sm font-semibold text-green-700">
-          ✅ Customer saved successfully.
+          Customer saved successfully.
         </p>
       )}
       {params?.deleted && (
         <p className="mt-4 rounded-lg bg-green-50 px-4 py-3 text-sm font-semibold text-green-700">
-          ✅ Customer deleted.
+          Customer deleted.
         </p>
       )}
 
